@@ -147,12 +147,12 @@
             </Grid.RowDefinitions>
 
             <!-- Text Blocks -->
-            <TextBlock x:Name="TextBlock1" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-            <TextBlock x:Name="TextBlock2" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-            <TextBlock x:Name="TextBlock3" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
-            <TextBlock x:Name="TextBlock4" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
-            <TextBlock x:Name="TextBlock5" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center"/>
-            <TextBlock x:Name="TextBlock6" Style="{StaticResource SliderLabel}" Grid.Row="2" Grid.Column="5" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TextBlock1" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock x:Name="TextBlock2" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TextBlock3" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TextBlock4" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TextBlock5" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TextBlock6" Style="{StaticResource SliderLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Grid.Row="2" Grid.Column="5" VerticalAlignment="Center"/>
 
             <!-- Border -->
             <local:SliderBorder x:Name="SliderCell1" Style="{StaticResource Border}" Grid.Row="1" Grid.Column="0" MouseLeftButtonDown="SliderCell_Click" CustomSlider="{Binding ElementName=Slider1}"/>

@@ -23,7 +23,7 @@
                 </Grid.RowDefinitions>
 
 
-                <ui:TextBlock FontTypography="Title" Text="Settings" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <ui:TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontTypography="Title" Text="Settings" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 <Label Content="Adjust how the app behaves and looks."
                    Padding="0"
                    Margin="0,35,0,15"
