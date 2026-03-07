@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36212.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlPad", "ControlPad\ControlPad.csproj", "{D35BB3DA-59CF-B3B9-1C64-51118D02B4EA}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ControlPadWizard", "ControlPadWizard\ControlPadWizard.vdproj", "{FDF88633-3881-967C-F6CE-39EAFEC2C878}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{D35BB3DA-59CF-B3B9-1C64-51118D02B4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D35BB3DA-59CF-B3B9-1C64-51118D02B4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D35BB3DA-59CF-B3B9-1C64-51118D02B4EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDF88633-3881-967C-F6CE-39EAFEC2C878}.Debug|Any CPU.ActiveCfg = Debug
-		{FDF88633-3881-967C-F6CE-39EAFEC2C878}.Debug|Any CPU.Build.0 = Debug
-		{FDF88633-3881-967C-F6CE-39EAFEC2C878}.Release|Any CPU.ActiveCfg = Release
-		{FDF88633-3881-967C-F6CE-39EAFEC2C878}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,12 +1,16 @@
 .vs/
+.idea/
+.claude/
 
 ControlPad/bin/
 ControlPad/obj/
 ControlPad/publish/
-ControlPadWizard/Release
-ControlPadWizard/Debug
 
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Installer output
+Installer/Output/
+Installer/redist/
