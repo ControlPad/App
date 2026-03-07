@@ -66,21 +66,38 @@ Type: filesandordirs; Name: "{app}"
 [Code]
 function IsDotNet9Installed(): Boolean;
 var
-  Names: TArrayOfString;
+  ResultCode: Integer;
+  TempFile: String;
+  Lines: TArrayOfString;
   I: Integer;
+  FindRec: TFindRec;
 begin
   Result := False;
+  TempFile := ExpandConstant('{tmp}\dotnet_check.txt');
 
-  // .NET registers each runtime version as a named value under this key
-  if RegGetValueNames(HKLM, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App', Names) then
+  // Use dotnet CLI to list runtimes and check for WindowsDesktop 9.0.x
+  if Exec('cmd.exe', '/c dotnet --list-runtimes > "' + TempFile + '" 2>&1', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
   begin
-    for I := 0 to GetArrayLength(Names) - 1 do
+    if LoadStringsFromFile(TempFile, Lines) then
     begin
-      if Pos('9.0.', Names[I]) = 1 then
+      for I := 0 to GetArrayLength(Lines) - 1 do
       begin
-        Result := True;
-        Exit;
+        if (Pos('Microsoft.WindowsDesktop.App 9.0.', Lines[I]) > 0) then
+        begin
+          Result := True;
+          Exit;
+        end;
       end;
+    end;
+  end;
+
+  // Fallback: check if the runtime folder exists on disk
+  if not Result then
+  begin
+    if FindFirst(ExpandConstant('{commonpf}\dotnet\shared\Microsoft.WindowsDesktop.App\9.0.*'), FindRec) then
+    begin
+      Result := True;
+      FindClose(FindRec);
     end;
   end;
 end;
