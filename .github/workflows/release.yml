@@ -1,0 +1,92 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore ControlPad/ControlPad.csproj
+
+      - name: Publish (framework-dependent)
+        run: dotnet publish ControlPad/ControlPad.csproj -c Release -r win-x64 --no-self-contained -o publish
+
+      - name: Download .NET 9.0 Desktop Runtime installer
+        shell: pwsh
+        run: |
+          $releases = Invoke-RestMethod -Uri "https://dotnetcli.azureedge.net/dotnet/release-metadata/9.0/releases.json"
+          $version = $releases.'latest-release'
+          if (-not $version) { throw "Could not determine .NET 9.0 version" }
+          Write-Host "Desktop Runtime version: $version"
+          $url = "https://dotnetcli.azureedge.net/dotnet/WindowsDesktop/$version/windowsdesktop-runtime-$version-win-x64.exe"
+          Write-Host "Downloading from: $url"
+          New-Item -ItemType Directory -Force -Path Installer/redist | Out-Null
+          curl.exe -L --fail --retry 3 -o "Installer/redist/windowsdesktop-runtime-9.0-win-x64.exe" $url
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          echo "C:\Program Files (x86)\Inno Setup 6" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Update version in installer script
+        shell: pwsh
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $version = "${{ github.ref_name }}".TrimStart("v")
+          } else {
+            $version = "0.0.0-dev"
+          }
+          $issPath = "Installer/ControlPad.iss"
+          $content = Get-Content $issPath -Raw
+          $content = $content -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$version`""
+          # Enable the bundled runtime line
+          $content = $content -replace '; Source: "redist\\', 'Source: "redist\'
+          Set-Content $issPath $content
+
+      - name: Build installer
+        shell: cmd
+        run: iscc "Installer\ControlPad.iss"
+
+      - name: Generate checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash "Installer/Output/ControlPad-Setup.exe" -Algorithm SHA256).Hash
+          "$hash  ControlPad-Setup.exe" | Out-File -FilePath "Installer/Output/checksums.sha256" -Encoding utf8
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ControlPad-Setup
+          path: |
+            Installer/Output/ControlPad-Setup.exe
+            Installer/Output/checksums.sha256
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
+          generate_release_notes: true
+          files: |
+            Installer/Output/ControlPad-Setup.exe
+            Installer/Output/checksums.sha256
