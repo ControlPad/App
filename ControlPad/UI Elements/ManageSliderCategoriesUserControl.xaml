@@ -32,7 +32,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ui:TextBlock FontTypography="Title" Text="Slider Categories" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <ui:TextBlock FontTypography="Title" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="Slider Categories" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
 
             <Border BorderThickness="1" Grid.Row="1" Margin="0,30,30,30"

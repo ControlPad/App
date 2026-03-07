@@ -33,7 +33,7 @@ BasedOn="{StaticResource {x:Type ListBox}}">
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ui:TextBlock FontTypography="Title" Text="Button Categories" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <ui:TextBlock FontTypography="Title" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="Button Categories" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
             <Border BorderThickness="1" Grid.Row="1" Margin="00,30,30,30" BorderBrush="{ui:ThemeResource ControlStrokeColorDefaultBrush}" CornerRadius="4">
                 <ListBox x:Name="lb_Categories" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,0" Grid.Row="1" Panel.ZIndex="1" Background="Black"/>
