@@ -66,20 +66,22 @@ Type: filesandordirs; Name: "{app}"
 [Code]
 function IsDotNet9Installed(): Boolean;
 var
-  ResultCode: Integer;
-  Output: AnsiString;
-  TempFile: String;
+  Names: TArrayOfString;
+  I: Integer;
 begin
   Result := False;
-  TempFile := ExpandConstant('{tmp}\dotnet_check.txt');
 
-  // Check if the .NET 9.0 Desktop Runtime is installed via registry
-  Result := RegKeyExists(HKLM, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App\9.0');
-
-  if not Result then
+  // .NET registers each runtime version as a named value under this key
+  if RegGetValueNames(HKLM, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App', Names) then
   begin
-    // Fallback: try checking via registry for any 9.0.x version
-    Result := RegKeyExists(HKLM, 'SOFTWARE\WOW6432Node\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App\9.0');
+    for I := 0 to GetArrayLength(Names) - 1 do
+    begin
+      if Pos('9.0.', Names[I]) = 1 then
+      begin
+        Result := True;
+        Exit;
+      end;
+    end;
   end;
 end;
 
