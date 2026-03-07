@@ -32,14 +32,17 @@ jobs:
       - name: Download .NET 9.0 Desktop Runtime installer
         shell: pwsh
         run: |
-          $runtimeUrl = (Invoke-WebRequest -Uri "https://dotnet.microsoft.com/download/dotnet/9.0" -UseBasicParsing).Links |
-            Where-Object { $_.href -match "windowsdesktop-runtime.*win-x64.exe" } |
-            Select-Object -First 1 -ExpandProperty href
-          if (-not $runtimeUrl) {
-            # Fallback to a known direct download pattern
-            $runtimeUrl = "https://download.visualstudio.microsoft.com/download/pr/dotnet-windowsdesktop-runtime-9.0-win-x64.exe"
-          }
-          Write-Host "Downloading .NET runtime from: $runtimeUrl"
+          # Get the exact .NET 9.0 version installed by setup-dotnet
+          $sdkVersion = dotnet --version
+          Write-Host "SDK version: $sdkVersion"
+          # Query the releases index to find the matching runtime download
+          $releasesIndex = Invoke-RestMethod -Uri "https://dotnetcli.azureedge.net/dotnet/release-metadata/9.0/releases.json"
+          $latestRelease = $releasesIndex.releases[0]
+          $runtimeVersion = $latestRelease.'windowsdesktop'.version
+          Write-Host "Desktop Runtime version: $runtimeVersion"
+          $file = $latestRelease.'windowsdesktop'.files | Where-Object { $_.name -eq "windowsdesktop-runtime-win-x64.exe" }
+          $runtimeUrl = $file.url
+          Write-Host "Downloading .NET Desktop Runtime from: $runtimeUrl"
           New-Item -ItemType Directory -Force -Path Installer/redist | Out-Null
           Invoke-WebRequest -Uri $runtimeUrl -OutFile "Installer/redist/windowsdesktop-runtime-9.0-win-x64.exe" -UseBasicParsing
 
