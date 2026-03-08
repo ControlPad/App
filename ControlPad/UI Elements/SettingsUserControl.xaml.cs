@@ -12,15 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
 
 namespace ControlPad
 {
     public partial class SettingsUserControl : UserControl
     {
-        private bool _isInitialized = false;
+        private readonly bool _isInitialized = false;
+        private readonly MainWindow _mainWindow;
+
         public SettingsUserControl(MainWindow mainWindow)
         {
             InitializeComponent();
+            _mainWindow = mainWindow;
             _isInitialized = true;
             SetControls();
         }
@@ -67,6 +71,15 @@ namespace ControlPad
             Settings.SelectedThemeIndex = ThemeComboBox.SelectedIndex;
         }
 
+        private void BackgroundComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isInitialized)
+                return;
+
+            ChangeAppBackground(BackgroundComboBox.SelectedIndex);
+            Settings.SelectedBackgroundIndex = BackgroundComboBox.SelectedIndex;
+        }
+
         private void nb_TranslationExponent_ValueChanged(object sender, Wpf.Ui.Controls.NumberBoxValueChangedEventArgs e)
         {
             if (!_isInitialized)
@@ -94,12 +107,35 @@ namespace ControlPad
             }
         }
 
+        public void ChangeAppBackground(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    _mainWindow.WindowBackdropType = WindowBackdropType.None;
+                    break;
+                case 1:
+                    _mainWindow.WindowBackdropType = WindowBackdropType.Acrylic;
+                    break;
+                case 2:
+                    _mainWindow.WindowBackdropType = WindowBackdropType.Mica;
+                    break;
+                case 3:
+                    _mainWindow.WindowBackdropType = WindowBackdropType.Tabbed;
+                    break;
+                case 4:
+                    _mainWindow.WindowBackdropType = WindowBackdropType.Auto;
+                    break;
+            }
+        }
+
         public void SetControls()
         {
             cb_StartWithWindows.IsChecked = Settings.StartWithWindows;
             cb_StartMinimized.IsChecked = Settings.StartMinimized;
             cb_MinimizeToTray.IsChecked = Settings.MinimizeToSystemTray;
             ThemeComboBox.SelectedIndex = Settings.SelectedThemeIndex;
+            BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
             nb_TranslationExponent.Value = Settings.TranslationExponent;
         }
 

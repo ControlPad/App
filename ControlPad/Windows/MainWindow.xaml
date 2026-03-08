@@ -13,19 +13,17 @@
         Height="600"
         Closing="mainWindow_Closing"
         Closed="mainWindow_Closed"
-        WindowBackdropType="Mica"
+        WindowBackdropType="Tabbed"
         ExtendsContentIntoTitleBar="True"
-        ResizeMode="NoResize"   
-        >
+        ResizeMode="NoResize">
 
     <DockPanel>
-        <tray:NotifyIcon 
-    x:Name="NotifyIcon"
-    FocusOnLeftClick="True"
-    MenuOnRightClick="True"                
-    Icon="pack://application:,,,/Resources/logo.ico"
-    TooltipText="Slidr"
-    >
+        <tray:NotifyIcon
+            x:Name="NotifyIcon"
+            FocusOnLeftClick="True"
+            MenuOnRightClick="True"
+            Icon="pack://application:,,,/Resources/logo.ico"
+            TooltipText="Slidr">
             <tray:NotifyIcon.Menu>
                 <ContextMenu>
                     <MenuItem Header="Open" Click="MI_Open_Click" />

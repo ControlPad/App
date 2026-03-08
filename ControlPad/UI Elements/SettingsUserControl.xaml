@@ -20,6 +20,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
 
@@ -156,7 +157,38 @@
                     </ComboBox>
                 </Grid>
 
+                <!-- App Background -->
                 <Grid Margin="0,8,0,0" Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                        <Label Content="App _background"
+                           Padding="0"
+                           Target="{Binding ElementName=ThemeComboBox}"/>
+                        <Label Content="Choose how the app background looks.&#x0a;"
+                           Padding="0"
+                           Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </StackPanel>
+
+                    <ComboBox x:Name="BackgroundComboBox"
+                              Grid.Column="1"
+                              MinWidth="180"
+                              SelectedIndex="3"
+                              VerticalAlignment="Center" SelectionChanged="BackgroundComboBox_SelectionChanged" 
+                              >
+                        <ComboBoxItem Content="None"/>
+                        <ComboBoxItem Content="Acrylic"/>
+                        <ComboBoxItem Content="Mica"/>
+                        <ComboBoxItem Content="Nebula"/>
+                        <ComboBoxItem Content="Auto"/>
+                    </ComboBox>
+                </Grid>
+
+                <!-- Presets -->
+                <Grid Margin="0,8,0,0" Grid.Row="7">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>

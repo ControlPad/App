@@ -16,6 +16,7 @@ namespace ControlPad
         private static bool _minimizeToSystemTray = true;
         private static double _translationExponent = 1d;
         private static int _selectedThemeIndex = 0;
+        private static int _selectedBackgroundIndex = 3;
         private static int _sliderDeadZone = 4;
 
         static Settings()
@@ -73,6 +74,16 @@ namespace ControlPad
             }
         }
 
+        public static int SelectedBackgroundIndex
+        {
+            get => _selectedBackgroundIndex;
+            set
+            {
+                _selectedBackgroundIndex = value;
+                Save();
+            }
+        }
+
         public static int SliderDeadZone
         {
             get => _sliderDeadZone;
@@ -101,6 +112,7 @@ namespace ControlPad
             public bool MinimizeToSystemTray { get; set; } = true;
             public double TranslationExponent { get; set; } = 1d;
             public int SelectedThemeIndex { get; set; } = 0;
+            public int SelectedBackgroundIndex { get; set; } = 3;
             public int SliderDeadZone { get; set; } = 4;
         }
 
@@ -121,6 +133,7 @@ namespace ControlPad
                 _startMinimized = data.StartMinimized;
                 _minimizeToSystemTray = data.MinimizeToSystemTray;               
                 _selectedThemeIndex = data.SelectedThemeIndex;
+                _selectedBackgroundIndex = data.SelectedBackgroundIndex;
                 _sliderDeadZone = data.SliderDeadZone;
                 _translationExponent = data.TranslationExponent;
             }
@@ -141,6 +154,7 @@ namespace ControlPad
                     StartMinimized = _startMinimized,
                     MinimizeToSystemTray = _minimizeToSystemTray,                    
                     SelectedThemeIndex = _selectedThemeIndex,
+                    SelectedBackgroundIndex = _selectedBackgroundIndex,
                     SliderDeadZone = _sliderDeadZone,
                     TranslationExponent = _translationExponent,
                 };
