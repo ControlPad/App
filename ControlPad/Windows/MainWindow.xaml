@@ -13,10 +13,9 @@
         Height="600"
         Closing="mainWindow_Closing"
         Closed="mainWindow_Closed"
-        WindowBackdropType="Mica"
+        WindowBackdropType="Tabbed"
         ExtendsContentIntoTitleBar="True"
-        ResizeMode="NoResize"   
-        >
+        ResizeMode="NoResize">
 
     <DockPanel>
         <tray:NotifyIcon 
