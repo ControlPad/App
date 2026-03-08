@@ -22,6 +22,7 @@ namespace ControlPad
         public static bool IsConnected = false;
         private static CancellationTokenSource? _readCts;
         private static readonly StringBuilder _lineBuf = new();
+        private static BoardType _lastBoardType = BoardType.None;
 
         public static void Initialize(MainWindow mainWindow, EventHandler eventHandler)
         {
@@ -162,9 +163,26 @@ namespace ControlPad
             try
             {
                 var inputs = Regex.Split(line, ",");
-                if (inputs.Length < 16) return;
+                if (inputs.Length < 19) return;
 
-                UpdateValues(inputs);
+                if (int.TryParse(inputs[0], out int boardType))
+                {
+                    var newBoardType = (BoardType)boardType;
+                    var oldBoardType = _lastBoardType;
+
+                    if (oldBoardType != newBoardType)
+                    {
+                        _mainWindow.Dispatcher.BeginInvoke(() =>
+                        {
+                            _mainWindow.UpdateBoardType(oldBoardType, newBoardType);
+                        });
+                        _lastBoardType = newBoardType;
+                    }
+                }
+
+                int subscribtionTier = int.Parse(inputs[1]);
+
+                UpdateValues(inputs[2..]);
 
                 // UI-Updates ggf. drosseln
                 _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() =>
@@ -188,31 +206,6 @@ namespace ControlPad
                 _serialPort?.Dispose();
             }
             catch { }
-        }
-
-        private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            if (_serialPort == null || !_serialPort.IsOpen) return;
-
-            try
-            {
-                string line = _serialPort.ReadLine().Replace("\r", "");
-                string[] inputs = Regex.Split(line, ",");
-
-                if (inputs.Length < 17) return;
-
-                UpdateValues(inputs);
-
-                _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() => _eventHandler.Update(DataHandler.SliderValues, DataHandler.ButtonValues));
-            }
-            catch (IOException)
-            {
-                return;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"EX: {ex}");
-            }
         }
 
         private static void UpdateValues(string[] inputs)
