@@ -127,7 +127,7 @@
     </UserControl.Resources>
     <!-- ===== Layout ===== -->
     <Border Padding="5">
-        <Grid>
+        <Grid x:Name="MainGrid">
             <!-- 6 Slider Columns + 1 Button Column -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>

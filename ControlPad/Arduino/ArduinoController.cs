@@ -22,6 +22,7 @@ namespace ControlPad
         public static bool IsConnected = false;
         private static CancellationTokenSource? _readCts;
         private static readonly StringBuilder _lineBuf = new();
+        private static BoardType _lastBoardType = BoardType.None;
 
         public static void Initialize(MainWindow mainWindow, EventHandler eventHandler)
         {
@@ -162,7 +163,19 @@ namespace ControlPad
             try
             {
                 var inputs = Regex.Split(line, ",");
-                if (inputs.Length < 16) return;
+                if (inputs.Length < 17) return;
+
+                if (int.TryParse(inputs[0], out int boardType))
+                {
+                    if (_lastBoardType != (BoardType)boardType)
+                    {
+                        _mainWindow.Dispatcher.BeginInvoke(() =>
+                        {
+                            _mainWindow.UpdateBoardType(_lastBoardType, (BoardType)boardType);
+                        });
+                        _lastBoardType = (BoardType)boardType;
+                    }
+                }
 
                 UpdateValues(inputs);
 
@@ -190,7 +203,7 @@ namespace ControlPad
             catch { }
         }
 
-        private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        /*private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (_serialPort == null || !_serialPort.IsOpen) return;
 
@@ -213,7 +226,7 @@ namespace ControlPad
             {
                 Debug.WriteLine($"EX: {ex}");
             }
-        }
+        }*/
 
         private static void UpdateValues(string[] inputs)
         {

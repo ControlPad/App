@@ -1,22 +1,9 @@
-﻿using ControlPad;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.Win32;
-using NAudio.SoundFont;
-using System.Collections.ObjectModel;
-using System.Configuration;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Tray;
 
 namespace ControlPad
 {
@@ -45,6 +32,22 @@ namespace ControlPad
             DataHandler.LoadPreset(GetCurrentPreset(), _settingsUserControl, _homeUserControl, true);
             _manageSliderCategoriesUserControl = new ManageSliderCategoriesUserControl(this);
             _manageButtonCategoriesUserControl = new ManageButtonCategoriesUserControl(this);
+        }
+
+        public void UpdateBoardType(BoardType curBoardType, BoardType newBoardType)
+        {
+            if (MainContentFrame.Content is HomeUserControl homeControl)
+            {
+                int count = homeControl.MainGrid.ColumnDefinitions.Count;
+                foreach (UIElement child in homeControl.MainGrid.Children)
+                {
+                    if (curBoardType == BoardType.Right && newBoardType == BoardType.Left)
+                        Grid.SetColumn(child, (Grid.GetColumn(child) + 1) % count);
+
+                    else if (curBoardType == BoardType.Left && newBoardType == BoardType.Right)
+                        Grid.SetColumn(child, (Grid.GetColumn(child) - 1 + count) % count);
+                }
+            }
         }
 
         private Preset GetCurrentPreset()
