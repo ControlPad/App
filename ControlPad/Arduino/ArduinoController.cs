@@ -163,21 +163,26 @@ namespace ControlPad
             try
             {
                 var inputs = Regex.Split(line, ",");
-                if (inputs.Length < 17) return;
+                if (inputs.Length < 19) return;
 
                 if (int.TryParse(inputs[0], out int boardType))
                 {
-                    if (_lastBoardType != (BoardType)boardType)
+                    var newBoardType = (BoardType)boardType;
+                    var oldBoardType = _lastBoardType;
+
+                    if (oldBoardType != newBoardType)
                     {
                         _mainWindow.Dispatcher.BeginInvoke(() =>
                         {
-                            _mainWindow.UpdateBoardType(_lastBoardType, (BoardType)boardType);
+                            _mainWindow.UpdateBoardType(oldBoardType, newBoardType);
                         });
-                        _lastBoardType = (BoardType)boardType;
+                        _lastBoardType = newBoardType;
                     }
                 }
 
-                UpdateValues(inputs);
+                int subscribtionTier = int.Parse(inputs[1]);
+
+                UpdateValues(inputs[2..]);
 
                 // UI-Updates ggf. drosseln
                 _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() =>

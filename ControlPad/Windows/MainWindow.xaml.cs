@@ -41,7 +41,7 @@ namespace ControlPad
                 int count = homeControl.MainGrid.ColumnDefinitions.Count;
                 foreach (UIElement child in homeControl.MainGrid.Children)
                 {
-                    if (curBoardType == BoardType.Right && newBoardType == BoardType.Left)
+                    if ((curBoardType == BoardType.Right || curBoardType == BoardType.None) && newBoardType == BoardType.Left)
                         Grid.SetColumn(child, (Grid.GetColumn(child) + 1) % count);
 
                     else if (curBoardType == BoardType.Left && newBoardType == BoardType.Right)
