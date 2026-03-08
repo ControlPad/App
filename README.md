@@ -38,7 +38,7 @@ Flash the `InoSkript/InoSkript.ino` sketch to your Arduino. It sends slider valu
 
 ```bash
 # Clone the repository
-git clone https://github.com/ControlPad/ControlPad.git
+git clone https://github.com/ControlPad/App.git
 cd ControlPad
 
 # Build
