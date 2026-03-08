@@ -90,3 +90,4 @@ jobs:
           files: |
             Installer/Output/ControlPad-Setup.exe
             Installer/Output/checksums.sha256
+            requirements.json
