@@ -102,7 +102,7 @@ namespace ControlPad
                 {
                     try
                     {
-                        Directory.Delete(Path.Combine(DataHandler.AppDataRoaming, "ControlPad", "Presets", preset.Name), true);
+                        Directory.Delete(Path.Combine(DataHandler.AppDataRoaming, "Slidr", "Presets", preset.Name), true);
                     }
                     catch (Exception ex)
                     {
@@ -115,7 +115,7 @@ namespace ControlPad
             foreach (Preset preset in lv_Presets.Items)
             {
                 string? currentPath = DataHandler.GetPresetPath(preset.Id);
-                string newPath = Path.Combine(DataHandler.AppDataRoaming, "ControlPad", "Presets", preset.Name);
+                string newPath = Path.Combine(DataHandler.AppDataRoaming, "Slidr", "Presets", preset.Name);
                 try
                 {
                     if (currentPath != null && currentPath != newPath)
@@ -211,7 +211,7 @@ namespace ControlPad
 
         private void ShowError(string msg)
         {
-            System.Windows.MessageBox.Show(msg, "Control Pad", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Windows.MessageBox.Show(msg, "Slidr", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

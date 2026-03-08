@@ -65,7 +65,7 @@ namespace ControlPad
 
                 if (!Settings.TrayIconMessageShown)
                 {
-                    new ToastContentBuilder().AddText("Control Pad minimized to System Tray").Show();
+                    new ToastContentBuilder().AddText("Slidr minimized to System Tray").Show();
                     Settings.TrayIconMessageShown = true;
                 }
             }

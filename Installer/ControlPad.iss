@@ -1,10 +1,10 @@
-; ControlPad Inno Setup Script
+; Slidr Inno Setup Script
 ; Requires Inno Setup 6.0+
 
-#define MyAppName "ControlPad"
+#define MyAppName "Slidr"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "ControlPad"
-#define MyAppExeName "ControlPad.exe"
+#define MyAppPublisher "Slidr"
+#define MyAppExeName "Slidr.exe"
 #define MyAppURL "https://github.com/your-username/ControlPad"
 
 ; .NET 9.0 Desktop Runtime download URL (x64)
@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=ControlPad-Setup
+OutputBaseFilename=Slidr-Setup
 SetupIconFile=..\ControlPad\Resources\logo.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2
@@ -39,7 +39,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "autostart"; Description: "Start ControlPad with Windows"; GroupDescription: "Other options:"
+Name: "autostart"; Description: "Start Slidr with Windows"; GroupDescription: "Other options:"
 
 [Files]
 ; Application files from publish output

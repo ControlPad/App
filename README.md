@@ -1,6 +1,8 @@
-# ControlPad
+# Slidr
 
 A Windows desktop application that turns an Arduino-based control pad into a fully configurable audio mixer and macro board. Map physical sliders to per-app volume control and buttons to actions like muting, launching apps, opening websites, or simulating key presses.
+
+> **Note for developers and AI assistants:** The C# namespaces, project file names, and internal identifiers still use `ControlPad`. Only the user-facing name has changed to **Slidr**. Do not rename namespaces, `.csproj` files, or the solution file.
 
 ## Features
 
@@ -36,7 +38,7 @@ Flash the `InoSkript/InoSkript.ino` sketch to your Arduino. It sends slider valu
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/ControlPad.git
+git clone https://github.com/ControlPad/ControlPad.git
 cd ControlPad
 
 # Build
@@ -62,7 +64,7 @@ The installer is built with [Inno Setup](https://jrsoftware.org/isinfo.php) (v6+
 
 1. Publish the app (framework-dependent or self-contained)
 2. Open `Installer/ControlPad.iss` in Inno Setup Compiler
-3. Compile to produce `ControlPad-Setup.exe`
+3. Compile to produce `Slidr-Setup.exe`
 
 Alternatively, use the GitHub Actions release workflow — push a version tag (`v*`) and the installer is built automatically.
 

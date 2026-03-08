@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:ControlPad"
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/logo.ico"
-        Title="Control Pad"
+        Title="Slidr"
         Width="650"
         Height="600"
         Closing="mainWindow_Closing"
@@ -24,7 +24,7 @@
     FocusOnLeftClick="True"
     MenuOnRightClick="True"                
     Icon="pack://application:,,,/Resources/logo.ico"
-    TooltipText="Control Pad"
+    TooltipText="Slidr"
     >
             <tray:NotifyIcon.Menu>
                 <ContextMenu>
@@ -37,7 +37,7 @@
         <ui:TitleBar
             DockPanel.Dock="Top"
             x:Name="titleBarMainWindow"
-            Title="Control Pad"
+            Title="Slidr"
             ShowMaximize="False"
             CanMaximize="False"
             Icon="{ui:ImageIcon 'pack://application:,,,/Resources/logo.ico'}" />

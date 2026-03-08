@@ -15,14 +15,14 @@ namespace ControlPad
         private static Mutex _mutex;
         protected override void OnStartup(StartupEventArgs e)
         {
-            const string mutexName = "ControlPad";
+            const string mutexName = "Slidr";
             bool createdNew;
 
             _mutex = new Mutex(true, mutexName, out createdNew);
 
             if (!createdNew)
             {
-                MessageBox.Show("Control Pad is already open.");
+                MessageBox.Show("Slidr is already open.");
                 _mutex?.ReleaseMutex();
                 _mutex?.Dispose();
                 Current.Shutdown();

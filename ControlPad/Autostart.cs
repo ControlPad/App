@@ -9,7 +9,7 @@ namespace ControlPad
     {
         const string RunKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         const string ApprovedKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
-        const string AppName = "ControlPad";
+        const string AppName = "Slidr";
 
         public static void Set(bool enable, bool startHidden)
         {
