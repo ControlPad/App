@@ -182,7 +182,7 @@
                         <ComboBoxItem Content="None"/>
                         <ComboBoxItem Content="Acrylic"/>
                         <ComboBoxItem Content="Mica"/>
-                        <ComboBoxItem Content="Tabbed"/>
+                        <ComboBoxItem Content="Nebula"/>
                         <ComboBoxItem Content="Auto"/>
                     </ComboBox>
                 </Grid>
