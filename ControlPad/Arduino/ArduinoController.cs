@@ -208,31 +208,6 @@ namespace ControlPad
             catch { }
         }
 
-        /*private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            if (_serialPort == null || !_serialPort.IsOpen) return;
-
-            try
-            {
-                string line = _serialPort.ReadLine().Replace("\r", "");
-                string[] inputs = Regex.Split(line, ",");
-
-                if (inputs.Length < 17) return;
-
-                UpdateValues(inputs);
-
-                _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() => _eventHandler.Update(DataHandler.SliderValues, DataHandler.ButtonValues));
-            }
-            catch (IOException)
-            {
-                return;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"EX: {ex}");
-            }
-        }*/
-
         private static void UpdateValues(string[] inputs)
         {
             for (int i = 0; i < DataHandler.SliderValues.Count; i++)
