@@ -15,10 +15,10 @@ namespace ControlPad
     {
         public static string AppDataRoaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static Preset CurrentPreset { get; set; } = new Preset(0, "Preset1 (current)");
-        public static string GetSliderCategoriesPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"ControlPad\Presets\{CurrentPreset.Name}", "SliderCategories.json");
-        public static string GetButtonCategoriesPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"ControlPad\Presets\{CurrentPreset.Name}", "ButtonCategories.json");
-        public static string GetCategoryControlsPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"ControlPad\Presets\{CurrentPreset.Name}", "CategoryControls.txt");
-        public static string GetSettingsPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? $@"ControlPad\Presets\{CurrentPreset.Name}", "Settings.json");
+        public static string GetSliderCategoriesPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"Slidr\Presets\{CurrentPreset.Name}", "SliderCategories.json");
+        public static string GetButtonCategoriesPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"Slidr\Presets\{CurrentPreset.Name}", "ButtonCategories.json");
+        public static string GetCategoryControlsPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"Slidr\Presets\{CurrentPreset.Name}", "CategoryControls.txt");
+        public static string GetSettingsPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? $@"Slidr\Presets\{CurrentPreset.Name}", "Settings.json");
         public static ObservableCollection<SliderCategory> SliderCategories { get; set; } = new ObservableCollection<SliderCategory>();
         public static ObservableCollection<ButtonCategory> ButtonCategories { get; set; } = new ObservableCollection<ButtonCategory>();
         public static List<(CustomSlider slider, int value)> SliderValues { get; set; } = new();
@@ -128,7 +128,7 @@ namespace ControlPad
         public static List<Preset> GetPresets()
         {
             var presets = new List<Preset>();
-            var presetFolders = Directory.GetDirectories(Path.Combine(DataHandler.AppDataRoaming, "ControlPad", "Presets"));
+            var presetFolders = Directory.GetDirectories(Path.Combine(DataHandler.AppDataRoaming, "Slidr", "Presets"));
             foreach (var folder in presetFolders)
             {
                 if (File.Exists(@$"{folder}\ID.txt") && int.TryParse(File.ReadAllText(@$"{folder}\ID.txt"), out int id))
@@ -145,7 +145,7 @@ namespace ControlPad
 
         public static string? GetPresetPath(int idToSearchFor)
         {
-            var presetFolders = Directory.GetDirectories(Path.Combine(DataHandler.AppDataRoaming, "ControlPad", "Presets"));
+            var presetFolders = Directory.GetDirectories(Path.Combine(DataHandler.AppDataRoaming, "Slidr", "Presets"));
             foreach (var folder in presetFolders)
             {
                 if (int.TryParse(File.ReadAllText(@$"{folder}\ID.txt"), out int id))
@@ -156,16 +156,16 @@ namespace ControlPad
 
         public static void CheckAppDataFolder()
         {
-            if (!Directory.Exists(Path.Combine(AppDataRoaming, @"ControlPad\Presets")))
+            if (!Directory.Exists(Path.Combine(AppDataRoaming, @"Slidr\Presets")))
             {
-                Directory.CreateDirectory(Path.Combine(AppDataRoaming, @"ControlPad\Presets\"));
+                Directory.CreateDirectory(Path.Combine(AppDataRoaming, @"Slidr\Presets\"));
                 CreatePreset(new Preset(GetPresets().GetFreeId(p => p.Id), "Preset1 (current)"));
             }
         }
 
         public static bool CreatePreset(Preset preset)
         {
-            string path = Path.Combine(AppDataRoaming, @$"ControlPad\Presets\{preset.Name}\");
+            string path = Path.Combine(AppDataRoaming, @$"Slidr\Presets\{preset.Name}\");
             try
             {
                 if (!Directory.Exists(path))
