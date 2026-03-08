@@ -211,6 +211,7 @@ namespace ControlPad
             Settings.Load();
             settingsUserControl.SetControls();
             SettingsUserControl.ChangeAppTheme(Settings.SelectedThemeIndex);
+            settingsUserControl.ChangeAppBackground(Settings.SelectedBackgroundIndex);
         }
     }
 }
