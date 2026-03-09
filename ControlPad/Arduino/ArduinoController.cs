@@ -23,6 +23,7 @@ namespace ControlPad
         private static CancellationTokenSource? _readCts;
         private static readonly StringBuilder _lineBuf = new();
         private static BoardType _lastBoardType = BoardType.None;
+        private static BadgeType _lastBadgeType = BadgeType.None;
 
         public static void Initialize(MainWindow mainWindow, EventHandler eventHandler)
         {
@@ -42,11 +43,13 @@ namespace ControlPad
             {
                 if (_serialPort != null && !_serialPort.IsOpen)
                 {
+                    _lastBadgeType = BadgeType.None;
                     _mainWindow.Dispatcher.BeginInvoke(() =>
                     {
                         _mainWindow.BoardDisconnectedInfoBar.IsOpen = true;
                         if (_mainWindow.NVI_Home.IsActive) _mainWindow.MainContentFrame.Navigate(_mainWindow.progressRing);
                         _mainWindow.NVI_EditMode.Visibility = Visibility.Collapsed;
+                        _mainWindow.UpdateBadgeType(BadgeType.None);
                         IsConnected = false;
                     });
                 }
@@ -66,8 +69,10 @@ namespace ControlPad
                     _mainWindow.BoardDisconnectedInfoBar.IsOpen = true;
                     if (_mainWindow.NVI_Home.IsActive) _mainWindow.MainContentFrame.Navigate(_mainWindow.progressRing);
                     _mainWindow.NVI_EditMode.Visibility = Visibility.Collapsed;
+                    _mainWindow.UpdateBadgeType(BadgeType.None);
                     IsConnected = false;
                 });
+                _lastBadgeType = BadgeType.None;
                 return;
             }
 
@@ -149,11 +154,13 @@ namespace ControlPad
                 await Task.Delay(1, ct);
             }
 
+            _lastBadgeType = BadgeType.None;
             await _mainWindow.Dispatcher.InvokeAsync(() =>
             {
                 _mainWindow.BoardDisconnectedInfoBar.IsOpen = true;
                 if (_mainWindow.NVI_Home.IsActive) _mainWindow.MainContentFrame.Navigate(_mainWindow.progressRing);
                 _mainWindow.NVI_EditMode.Visibility = Visibility.Collapsed;
+                _mainWindow.UpdateBadgeType(BadgeType.None);
                 IsConnected = false;
             });
         }
@@ -180,7 +187,18 @@ namespace ControlPad
                     }
                 }
 
-                int subscribtionTier = int.Parse(inputs[1]);
+                if (int.TryParse(inputs[1], out int badgeValue))
+                {
+                    var newBadgeType = (BadgeType)badgeValue;
+                    if (_lastBadgeType != newBadgeType)
+                    {
+                        _mainWindow.Dispatcher.BeginInvoke(() =>
+                        {
+                            _mainWindow.UpdateBadgeType(newBadgeType);
+                        });
+                        _lastBadgeType = newBadgeType;
+                    }
+                }
 
                 UpdateValues(inputs[2..]);
 

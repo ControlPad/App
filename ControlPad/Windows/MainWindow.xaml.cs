@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 
 namespace ControlPad
@@ -32,6 +33,27 @@ namespace ControlPad
             DataHandler.LoadPreset(GetCurrentPreset(), _settingsUserControl, _homeUserControl, true);
             _manageSliderCategoriesUserControl = new ManageSliderCategoriesUserControl(this);
             _manageButtonCategoriesUserControl = new ManageButtonCategoriesUserControl(this);
+
+        }
+
+        public void UpdateBadgeType(BadgeType badgeType)
+        {
+            if (badgeType == BadgeType.None)
+            {
+                BadgeImage.Visibility = Visibility.Collapsed;
+                BadgeImage.Source = null;
+            }
+            else
+            {
+                string resourceName = badgeType == BadgeType.Supporter ? "Supporter" : "Premium";
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.UriSource = new Uri($"pack://application:,,,/Resources/{resourceName}.png");
+                bmp.DecodePixelHeight = 40; // decode at 2x display size for crisp HiDPI rendering
+                bmp.EndInit();
+                BadgeImage.Source = bmp;
+                BadgeImage.Visibility = Visibility.Visible;
+            }
         }
 
         public void UpdateBoardType(BoardType curBoardType, BoardType newBoardType)

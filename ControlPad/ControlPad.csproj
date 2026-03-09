@@ -14,12 +14,16 @@
 
   <ItemGroup>
     <None Remove="Resources\logo.ico" />
+    <None Remove="Resources\Supporter.png" />
+    <None Remove="Resources\Premium.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Resources\logo.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Supporter.png" />
+    <Resource Include="Resources\Premium.png" />
   </ItemGroup>
 
   <ItemGroup>
