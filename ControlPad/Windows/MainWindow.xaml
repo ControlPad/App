@@ -35,10 +35,22 @@
         <ui:TitleBar
             DockPanel.Dock="Top"
             x:Name="titleBarMainWindow"
-            Title="Slidr"
+            Title=""
             ShowMaximize="False"
             CanMaximize="False"
-            Icon="{ui:ImageIcon 'pack://application:,,,/Resources/logo.ico'}" />
+            Icon="{ui:ImageIcon 'pack://application:,,,/Resources/logo.ico'}">
+            <ui:TitleBar.Header>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Slidr" VerticalAlignment="Center" FontSize="12" />
+                    <Image x:Name="BadgeImage"
+                           Height="20"
+                           VerticalAlignment="Center"
+                           Margin="8,0,0,0"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           Visibility="Collapsed" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
         
         <ui:InfoBar
             x:Name="BoardDisconnectedInfoBar"
@@ -60,7 +72,7 @@
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem Content="Edit" x:Name="NVI_EditMode" Icon="{ui:SymbolIcon CheckboxUnchecked24}" Click="NVI_EditMode_Click"/>
+                <ui:NavigationViewItem Content="Edit" x:Name="NVI_EditMode" Visibility="Collapsed" Icon="{ui:SymbolIcon CheckboxUnchecked24}" Click="NVI_EditMode_Click"/>
                 <ui:NavigationViewItem Content="Settings" x:Name="NVI_Settings" Icon="{ui:SymbolIcon Settings24}" Click="NVI_Settings_Click"/>
                 <ui:NavigationViewItem Content="Exit" x:Name="NVI_Exit" Icon="{ui:SymbolIcon ArrowExit20}" Click="Exit_Click"/>
             </ui:NavigationView.FooterMenuItems>
