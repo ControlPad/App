@@ -139,8 +139,9 @@ namespace ControlPad
             BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
             nb_TranslationExponent.Value = Settings.TranslationExponent;
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            lbl_AppVersion.Content = version != null ? version.ToString() : "Unknown";
+            var infoVersion = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            lbl_AppVersion.Content = !string.IsNullOrEmpty(infoVersion) ? infoVersion : "Unknown";
         }
 
         private void Btn_Presets_Click(object sender, RoutedEventArgs e)
