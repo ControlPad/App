@@ -58,12 +58,24 @@ namespace ControlPad
             if (slider.Category != null)
                 foreach(AudioStream stream in slider.Category.AudioStreams)
                 {
+                    float volume = SliderToFloat(value);
+
+                    if (Settings.UnmuteOnSliderChange)
+                    {
+                        if (stream.Process != null)
+                            Task.Run(() => AudioController.MuteProcess(stream.Process, false));
+                        else if (stream.MicName != null)
+                            Task.Run(() => AudioController.MuteMic(stream.MicName, false));
+                        else if (stream.Process == null && stream.MicName == null)
+                            Task.Run(() => AudioController.MuteSystem(false));
+                    }
+
                     if (stream.Process != null)
-                        Task.Run(() => AudioController.SetProcessVolume(stream.Process, SliderToFloat(value)));
+                        Task.Run(() => AudioController.SetProcessVolume(stream.Process, volume));
                     else if (stream.MicName != null)
-                        Task.Run(() => AudioController.SetMicVolume(stream.MicName, SliderToFloat(value)));
+                        Task.Run(() => AudioController.SetMicVolume(stream.MicName, volume));
                     else if (stream.Process == null && stream.MicName == null)
-                        Task.Run(() => AudioController.SetSystemVolume(SliderToFloat(value)));
+                        Task.Run(() => AudioController.SetSystemVolume(volume));
                 }                            
         }
 
@@ -171,7 +183,10 @@ namespace ControlPad
         private float SliderToFloat(int value, int mode = 0)
         {
             value -= 1;
-            float normalized = Math.Min((float)value / 1022.0f, 1);
+            float normalized = Math.Clamp((float)value / 1022.0f, 0f, 1f);
+
+            if (normalized < 0.005f)
+                return 0f;
 
             return (float)Math.Pow(normalized, Settings.TranslationExponent);
         }

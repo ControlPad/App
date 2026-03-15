@@ -21,6 +21,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
 
@@ -103,8 +104,32 @@
                           Unchecked="cb_MinimizeToTray_Checked"/>
                 </Grid>
 
+                <!-- Unmute on slider change -->
+                <Grid Margin="0,8,0,8" Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                        <Label Content="_Unmute on slider change"
+                           Padding="0"
+                           Target="{Binding ElementName=cb_UnmuteOnSliderChange}"/>
+                        <Label Content="Automatically unmute a process when its slider is moved."
+                           Padding="0"
+                           Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </StackPanel>
+
+                    <CheckBox x:Name="cb_UnmuteOnSliderChange"
+                          Grid.Column="1"
+                          IsChecked="True"
+                          VerticalAlignment="Center"
+                          Checked="cb_UnmuteOnSliderChange_Checked"
+                          Unchecked="cb_UnmuteOnSliderChange_Checked"/>
+                </Grid>
+
                 <!-- Translation Exponent -->
-                <Grid Margin="0,8,0,0" Grid.Row="4">
+                <Grid Margin="0,8,0,0" Grid.Row="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -131,7 +156,7 @@
                 </Grid>
 
                 <!-- App Theme -->
-                <Grid Margin="0,8,0,0" Grid.Row="5">
+                <Grid Margin="0,8,0,0" Grid.Row="6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -158,7 +183,7 @@
                 </Grid>
 
                 <!-- App Background -->
-                <Grid Margin="0,8,0,0" Grid.Row="6">
+                <Grid Margin="0,8,0,0" Grid.Row="7">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -188,7 +213,7 @@
                 </Grid>
 
                 <!-- Presets -->
-                <Grid Margin="0,8,0,0" Grid.Row="7">
+                <Grid Margin="0,8,0,0" Grid.Row="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>

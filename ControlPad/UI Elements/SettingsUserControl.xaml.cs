@@ -62,6 +62,14 @@ namespace ControlPad
             Settings.MinimizeToSystemTray = cb_MinimizeToTray.IsChecked == true;
         }
 
+        private void cb_UnmuteOnSliderChange_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!_isInitialized)
+                return;
+
+            Settings.UnmuteOnSliderChange = cb_UnmuteOnSliderChange.IsChecked == true;
+        }
+
         private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_isInitialized)
@@ -134,6 +142,7 @@ namespace ControlPad
             cb_StartWithWindows.IsChecked = Settings.StartWithWindows;
             cb_StartMinimized.IsChecked = Settings.StartMinimized;
             cb_MinimizeToTray.IsChecked = Settings.MinimizeToSystemTray;
+            cb_UnmuteOnSliderChange.IsChecked = Settings.UnmuteOnSliderChange;
             ThemeComboBox.SelectedIndex = Settings.SelectedThemeIndex;
             BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
             nb_TranslationExponent.Value = Settings.TranslationExponent;
