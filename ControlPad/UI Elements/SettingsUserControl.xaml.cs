@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -137,6 +138,9 @@ namespace ControlPad
             ThemeComboBox.SelectedIndex = Settings.SelectedThemeIndex;
             BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
             nb_TranslationExponent.Value = Settings.TranslationExponent;
+
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            lbl_AppVersion.Content = version != null ? version.ToString() : "Unknown";
         }
 
         private void Btn_Presets_Click(object sender, RoutedEventArgs e)
