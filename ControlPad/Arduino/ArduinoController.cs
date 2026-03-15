@@ -192,6 +192,19 @@ namespace ControlPad
                     }
                 }
 
+                if (int.TryParse(inputs[1], out int badgeValue))
+                {
+                    var newBadgeType = (BadgeType)badgeValue;
+                    if (_lastBadgeType != newBadgeType)
+                    {
+                        _mainWindow.Dispatcher.BeginInvoke(() =>
+                        {
+                            _mainWindow.UpdateBadgeType(newBadgeType);
+                        });
+                        _lastBadgeType = newBadgeType;
+                    }
+                }
+
                 UpdateValues(inputs[2..]);
 
                 // UI-Updates ggf. drosseln
