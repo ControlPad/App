@@ -61,7 +61,7 @@ namespace ControlPad
 
         private static async Task TryOpenAsync()
         {
-            string? port = await Task.Run(() => ArduinoPortFinder.FindFirstArduinoPort());
+            var (port, deviceId) = await Task.Run(() => ArduinoPortFinder.FindFirstArduinoPort());
             if (port == null)
             {
                 await _mainWindow.Dispatcher.InvokeAsync(() =>
@@ -99,11 +99,16 @@ namespace ControlPad
                 _readCts = new CancellationTokenSource();
                 _ = Task.Run(() => ReadLoopAsync(sp, _readCts.Token));
 
+                string? serial = ArduinoPortFinder.ExtractSerial(deviceId);
+                BadgeType badge = await SubscriptionService.GetBadgeTypeAsync(serial);
+                _lastBadgeType = badge;
+
                 await _mainWindow.Dispatcher.InvokeAsync(() =>
                 {
                     _mainWindow.BoardDisconnectedInfoBar.IsOpen = false;
                     if (_mainWindow.NVI_Home.IsActive) _mainWindow.MainContentFrame.Navigate(_mainWindow._homeUserControl);
                     _mainWindow.NVI_EditMode.Visibility = Visibility.Visible;
+                    _mainWindow.UpdateBadgeType(badge);
                     IsConnected = true;
                 });
             }
@@ -184,19 +189,6 @@ namespace ControlPad
                             _mainWindow.UpdateBoardType(oldBoardType, newBoardType);
                         });
                         _lastBoardType = newBoardType;
-                    }
-                }
-
-                if (int.TryParse(inputs[1], out int badgeValue))
-                {
-                    var newBadgeType = (BadgeType)badgeValue;
-                    if (_lastBadgeType != newBadgeType)
-                    {
-                        _mainWindow.Dispatcher.BeginInvoke(() =>
-                        {
-                            _mainWindow.UpdateBadgeType(newBadgeType);
-                        });
-                        _lastBadgeType = newBadgeType;
                     }
                 }
 
