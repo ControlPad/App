@@ -12,7 +12,8 @@ namespace ControlPad
         private const string SubscriptionsUrl =
             "https://raw.githubusercontent.com/ControlPad/App/main/subscriptions.json";
 
-        private static readonly HttpClient _httpClient = new();
+        private static readonly HttpClient _httpClient = new() { Timeout = TimeSpan.FromSeconds(10) };
+        private static readonly Dictionary<string, BadgeType> _cache = new(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Fetches the subscriptions file from GitHub and returns the badge type
@@ -22,6 +23,9 @@ namespace ControlPad
         {
             if (string.IsNullOrEmpty(serial))
                 return BadgeType.None;
+
+            if (_cache.TryGetValue(serial, out var cached))
+                return cached;
 
             try
             {
@@ -33,8 +37,14 @@ namespace ControlPad
 
                 foreach (var entry in data.Subscriptions)
                 {
-                    if (string.Equals(entry.SerialNumber, serial, StringComparison.OrdinalIgnoreCase))
-                        return (BadgeType)entry.BadgeType;
+                    if (Enum.IsDefined(typeof(BadgeType), entry.BadgeType))
+                    {
+                        var badge = (BadgeType)entry.BadgeType;
+                        _cache[entry.SerialNumber] = badge;
+
+                        if (string.Equals(entry.SerialNumber, serial, StringComparison.OrdinalIgnoreCase))
+                            return badge;
+                    }
                 }
             }
             catch (Exception ex)
