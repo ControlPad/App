@@ -18,6 +18,7 @@ namespace ControlPad
         private static int _selectedThemeIndex = 0;
         private static int _selectedBackgroundIndex = 3;
         private static int _sliderDeadZone = 4;
+        private static bool _unmuteOnSliderChange = true;
 
         static Settings()
         {
@@ -94,6 +95,16 @@ namespace ControlPad
             }
         }
 
+        public static bool UnmuteOnSliderChange
+        {
+            get => _unmuteOnSliderChange;
+            set
+            {
+                _unmuteOnSliderChange = value;
+                Save();
+            }
+        }
+
         public static double TranslationExponent
         {
             get => _translationExponent;
@@ -114,6 +125,7 @@ namespace ControlPad
             public int SelectedThemeIndex { get; set; } = 0;
             public int SelectedBackgroundIndex { get; set; } = 3;
             public int SliderDeadZone { get; set; } = 4;
+            public bool UnmuteOnSliderChange { get; set; } = true;
         }
 
         public static void Load()
@@ -136,6 +148,7 @@ namespace ControlPad
                 _selectedBackgroundIndex = data.SelectedBackgroundIndex;
                 _sliderDeadZone = data.SliderDeadZone;
                 _translationExponent = data.TranslationExponent;
+                _unmuteOnSliderChange = data.UnmuteOnSliderChange;
             }
             catch
             {
@@ -157,6 +170,7 @@ namespace ControlPad
                     SelectedBackgroundIndex = _selectedBackgroundIndex,
                     SliderDeadZone = _sliderDeadZone,
                     TranslationExponent = _translationExponent,
+                    UnmuteOnSliderChange = _unmuteOnSliderChange,
                 };
 
                 var options = new JsonSerializerOptions { WriteIndented = true };
