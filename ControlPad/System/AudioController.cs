@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
 
@@ -24,7 +25,7 @@ namespace ControlPad
 
             volume = Math.Clamp(volume, 0f, 1f);
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            var processIds = GetProcessIds(processName);
             
 
             for (int i = 0; i < sessions?.Count; i++)
@@ -61,7 +62,7 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            var processIds = GetProcessIds(processName);
 
             for (int i = 0; i < sessions?.Count; i++)
             {
@@ -94,7 +95,7 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            var processIds = GetProcessIds(processName);
 
             for (int i = 0; i < sessions?.Count; i++)
             {
@@ -146,6 +147,73 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
             return sessions;
+        }
+
+        private static HashSet<int> GetProcessIds(string processIdentifier)
+        {
+            if (string.IsNullOrWhiteSpace(processIdentifier))
+                return new HashSet<int>();
+
+            bool isExeIdentifier = processIdentifier.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
+                processIdentifier.Contains('\\') || processIdentifier.Contains('/');
+
+            if (!isExeIdentifier)
+            {
+                return Process.GetProcessesByName(processIdentifier)
+                    .Select(process => process.Id)
+                    .ToHashSet();
+            }
+
+            var processName = Path.GetFileNameWithoutExtension(processIdentifier);
+            var matches = new HashSet<int>();
+            var resolvedTargetPath = TryGetFullPath(processIdentifier);
+
+            foreach (var process in Process.GetProcessesByName(processName))
+            {
+                try
+                {
+                    var processPath = process.MainModule?.FileName;
+                    if (string.IsNullOrWhiteSpace(processPath))
+                        continue;
+
+                    if (resolvedTargetPath == null)
+                    {
+                        matches.Add(process.Id);
+                    }
+                    else
+                    {
+                        var resolvedProcessPath = TryGetFullPath(processPath);
+                        if (resolvedProcessPath != null &&
+                            string.Equals(resolvedProcessPath, resolvedTargetPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            matches.Add(process.Id);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore processes where main module cannot be read.
+                }
+            }
+
+            if (matches.Count > 0)
+                return matches;
+
+            return Process.GetProcessesByName(processName)
+                .Select(process => process.Id)
+                .ToHashSet();
+        }
+
+        private static string? TryGetFullPath(string path)
+        {
+            try
+            {
+                return Path.GetFullPath(path);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
