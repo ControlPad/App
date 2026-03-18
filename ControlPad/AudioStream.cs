@@ -22,7 +22,7 @@ namespace ControlPad
             if (MicName != null)
                 DisplayName = MicName;
             else if (Process != null)
-                DisplayName = Process.Contains('\\') || Process.Contains('/')
+                DisplayName = ProcessIdentifierHelper.IsExecutablePathIdentifier(Process)
                     ? Path.GetFileName(Process)
                     : Process;
             else if (MicName == null && Process == null)

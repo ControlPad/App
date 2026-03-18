@@ -35,8 +35,7 @@ namespace ControlPad
                 existing = new ProcessOption
                 {
                     Identifier = processIdentifier,
-                    DisplayName = processIdentifier.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
-                                  processIdentifier.Contains('\\') || processIdentifier.Contains('/')
+                    DisplayName = ProcessIdentifierHelper.IsExecutablePathIdentifier(processIdentifier)
                         ? Path.GetFileName(processIdentifier)
                         : processIdentifier
                 };
@@ -96,6 +95,7 @@ namespace ControlPad
                     }
                     catch
                     {
+                        // Some system/privileged processes can throw while being inspected; skip those entries.
                         return null;
                     }
                 })
@@ -117,8 +117,8 @@ namespace ControlPad
 
         private sealed class ProcessOption
         {
-            public string DisplayName { get; set; } = string.Empty;
-            public string Identifier { get; set; } = string.Empty;
+            public string DisplayName { get; init; } = string.Empty;
+            public string Identifier { get; init; } = string.Empty;
         }
 
         private void btn_Cancel_Click(object sender, RoutedEventArgs e) => this.Close();

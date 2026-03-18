@@ -154,8 +154,7 @@ namespace ControlPad
             if (string.IsNullOrWhiteSpace(processIdentifier))
                 return new HashSet<int>();
 
-            bool isExeIdentifier = processIdentifier.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
-                processIdentifier.Contains('\\') || processIdentifier.Contains('/');
+            bool isExeIdentifier = ProcessIdentifierHelper.IsExecutablePathIdentifier(processIdentifier);
 
             if (!isExeIdentifier)
             {
@@ -178,6 +177,8 @@ namespace ControlPad
 
                     if (resolvedTargetPath == null)
                     {
+                        // Intermediate fallback: when configured path cannot be resolved, collect name matches now.
+                        // Final fallback below handles the case where no matches were collected in this loop.
                         matches.Add(process.Id);
                     }
                     else
@@ -199,6 +200,7 @@ namespace ControlPad
             if (matches.Count > 0)
                 return matches;
 
+            // If no exact path matches are visible (e.g., inaccessible MainModule), fall back to process name.
             return Process.GetProcessesByName(processName)
                 .Select(process => process.Id)
                 .ToHashSet();
@@ -212,8 +214,10 @@ namespace ControlPad
             }
             catch
             {
+                // Invalid or inaccessible paths should not break process matching; caller handles null as fallback.
                 return null;
             }
         }
+
     }
 }

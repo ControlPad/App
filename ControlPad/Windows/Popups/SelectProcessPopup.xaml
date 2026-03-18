@@ -9,12 +9,12 @@
         Icon="pack://application:,,,/Resources/logo.ico"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
-        Title="Please select a runnning process" Width="400" Height="170" MinHeight="20" MinWidth="20">
+        Title="Please select a running process" Width="400" Height="170" MinHeight="20" MinWidth="20">
 
     <DockPanel>
         <ui:TitleBar
 DockPanel.Dock="Top" x:Name="TitleBarSelectProcess"
-        Title="Please select a runnning process"
+        Title="Please select a running process"
         Icon="{ui:ImageIcon 'pack://application:,,,/Resources/logo.ico'}"/>
         
         <Grid>
