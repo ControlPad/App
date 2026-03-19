@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Wpf.Ui.Controls;
 
 namespace ControlPad
@@ -15,6 +16,9 @@ namespace ControlPad
             tb_CategoryName.Text = DataHandler.SliderCategories[indexOfCategory].Name;
             lb_AudioStreams.ItemsSource = DataHandler.SliderCategories[indexOfCategory].AudioStreams;
             lb_AudioStreams.DisplayMemberPath = "DisplayName";
+            btn_DetectGames.Visibility = string.Equals(DataHandler.SliderCategories[indexOfCategory].Name, "Games", StringComparison.OrdinalIgnoreCase)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         private void btn_AddProcess_Click(object sender, RoutedEventArgs e)
@@ -62,6 +66,14 @@ namespace ControlPad
 
             if (!containsMain)
                 DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(new AudioStream(null, null));
+        }
+
+        private void btn_DetectGames_Click(object sender, RoutedEventArgs e)
+        {
+            int count = DataHandler.RefreshAutoDetectedGames();
+            lb_AudioStreams.ItemsSource = DataHandler.SliderCategories[indexOfCategory].AudioStreams;
+            lb_AudioStreams.Items.Refresh();
+            MessageBox.Show($"Detected {count} games.", "Slidr", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

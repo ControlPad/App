@@ -196,6 +196,9 @@ namespace ControlPad
             foreach (var sliderCategory in DataHandler.LoadDataFromFile<SliderCategory>(GetSliderCategoriesPath()))
                 DataHandler.SliderCategories.Add(sliderCategory);
 
+            EnsureGamesCategory();
+            RefreshAutoDetectedGames();
+
             DataHandler.ButtonCategories.Clear();
             foreach (var buttonCategory in DataHandler.LoadDataFromFile<ButtonCategory>(GetButtonCategoriesPath()))
                 DataHandler.ButtonCategories.Add(buttonCategory);
@@ -212,6 +215,56 @@ namespace ControlPad
             settingsUserControl.SetControls();
             SettingsUserControl.ChangeAppTheme(Settings.SelectedThemeIndex);
             settingsUserControl.ChangeAppBackground(Settings.SelectedBackgroundIndex);
+        }
+
+        public static SliderCategory EnsureGamesCategory()
+        {
+            const string gamesCategoryName = "Games";
+            var gamesCategory = SliderCategories.FirstOrDefault(c => string.Equals(c.Name, gamesCategoryName, StringComparison.OrdinalIgnoreCase));
+
+            if (gamesCategory == null)
+            {
+                gamesCategory = new SliderCategory(gamesCategoryName, SliderCategories.GetFreeId(c => c.Id));
+                SliderCategories.Add(gamesCategory);
+                SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
+            }
+            else if (gamesCategory.Name != gamesCategoryName)
+            {
+                gamesCategory.Name = gamesCategoryName;
+                SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
+            }
+
+            return gamesCategory;
+        }
+
+        public static int RefreshAutoDetectedGames()
+        {
+            var gamesCategory = EnsureGamesCategory();
+            var detectedGames = GameDetector.DetectGameProcessNames();
+            var manualGameEntries = gamesCategory.AudioStreams
+                .Where(s => !s.IsAutoDetected)
+                .ToList();
+
+            var refreshedStreams = new List<AudioStream>(manualGameEntries);
+            var knownProcesses = new HashSet<string>(
+                manualGameEntries
+                    .Where(s => s.Process != null)
+                    .Select(s => s.Process!),
+                StringComparer.OrdinalIgnoreCase);
+
+            foreach (string processName in detectedGames)
+            {
+                if (knownProcesses.Contains(processName))
+                    continue;
+
+                refreshedStreams.Add(new AudioStream(processName, null, true));
+                knownProcesses.Add(processName);
+            }
+
+            gamesCategory.AudioStreams = new System.Collections.ObjectModel.ObservableCollection<AudioStream>(refreshedStreams);
+            SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
+
+            return detectedGames.Count;
         }
     }
 }
