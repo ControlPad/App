@@ -9,7 +9,7 @@ namespace ControlPad
     {
         private static readonly string[] LauncherAndUtilityKeywords =
         {
-            "unins", "setup", "crash", "report", "installer", "launcher", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup", "support"
+            "unins", "setup", "installer", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup"
         };
 
         private static readonly string[] KnownGameFolders =
@@ -58,7 +58,7 @@ namespace ControlPad
                     if (string.IsNullOrWhiteSpace(value))
                         continue;
 
-                    string resolvedPath = value.Replace(@"\\\\", @"\");
+                    string resolvedPath = value.Replace(@"\\", @"\");
                     string commonPath = Path.Combine(resolvedPath, "steamapps", "common");
                     CollectExecutableNames(commonPath, names, 4);
                 }
@@ -129,6 +129,12 @@ namespace ControlPad
 
             string lowerValue = value.ToLowerInvariant();
             if (LauncherAndUtilityKeywords.Any(k => lowerValue.Contains(k)))
+                return false;
+
+            if (lowerValue.EndsWith("_launcher") || lowerValue.EndsWith("launcher"))
+                return false;
+
+            if (lowerValue.Contains("crashreport"))
                 return false;
 
             return true;
