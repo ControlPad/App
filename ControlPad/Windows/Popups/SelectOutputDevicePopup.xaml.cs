@@ -6,14 +6,13 @@ namespace ControlPad
 {
     public partial class SelectOutputDevicePopup : FluentWindow
     {
-        AudioController audioController = new AudioController();
         public MMDevice? SelectedOutputDevice { get; set; }
 
         public SelectOutputDevicePopup()
         {
             InitializeComponent();
             cb_OutputDevices.DisplayMemberPath = "DeviceFriendlyName";
-            cb_OutputDevices.ItemsSource = audioController.GetOutputDevices();
+            cb_OutputDevices.ItemsSource = new AudioController().GetOutputDevices();
         }
 
         private void btn_Ok_Click(object sender, RoutedEventArgs e)

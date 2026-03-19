@@ -158,15 +158,7 @@ namespace ControlPad
 
         public List<MMDevice> GetOutputDevices()
         {
-            var outputDevices = new List<MMDevice>();
-            var devices = _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-
-            foreach (var device in devices)
-            {
-                outputDevices.Add(device);
-            }
-
-            return outputDevices;
+            return _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).ToList();
         }
 
         private MMDevice? GetOutputDevice(string? outputDeviceName)

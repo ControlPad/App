@@ -57,8 +57,11 @@ namespace ControlPad
         {
             bool containsMain = false;
             foreach (var item in lb_AudioStreams.Items)
-                if (((AudioStream)item).Process == null && ((AudioStream)item).MicName == null && ((AudioStream)item).DeviceName == null)
+            {
+                var stream = (AudioStream)item;
+                if (stream.Process == null && stream.MicName == null && stream.DeviceName == null)
                     containsMain = true;
+            }
 
             if (!containsMain)
                 DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(new AudioStream(null, null));
