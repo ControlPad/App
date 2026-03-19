@@ -57,11 +57,23 @@ namespace ControlPad
         {
             bool containsMain = false;
             foreach (var item in lb_AudioStreams.Items)
-                if (((AudioStream)item).DisplayName == "Main Audio")
+                if (((AudioStream)item).Process == null && ((AudioStream)item).MicName == null && ((AudioStream)item).DeviceName == null)
                     containsMain = true;
 
             if (!containsMain)
                 DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(new AudioStream(null, null));
+        }
+
+        private void btn_AddMainOutput_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new SelectOutputDevicePopup() { Owner = this };
+
+            if (dialog.ShowDialog() == true)
+            {
+                DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(
+                    new AudioStream(null, null, dialog.SelectedOutputDevice?.DeviceFriendlyName)
+                );
+            }
         }
     }
 }

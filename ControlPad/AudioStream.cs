@@ -11,19 +11,32 @@ namespace ControlPad
     {
         public string? Process { get; set; }
         public string? MicName { get; set; }
-        public string DisplayName { get; set; }
+        public string? DeviceName { get; set; }
+        public string DisplayName
+        {
+            get
+            {
+                if (MicName != null)
+                    return MicName;
+                if (Process != null)
+                    return Process;
+                if (DeviceName != null)
+                    return $"Main Audio ({DeviceName})";
+                return "Main Audio";
+            }
+        }
 
         public AudioStream(string? process, string? micName)
         {
             Process = process;
             MicName = micName;
+        }
 
-            if (MicName != null)
-                DisplayName = MicName;
-            else if (Process != null)
-                DisplayName = Process;
-            else if (MicName == null && Process == null)
-                DisplayName = "Main Audio";
+        public AudioStream(string? process, string? micName, string? deviceName)
+        {
+            Process = process;
+            MicName = micName;
+            DeviceName = deviceName;
         }
     }
 }

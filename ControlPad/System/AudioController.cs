@@ -40,10 +40,18 @@ namespace ControlPad
 
         public void SetSystemVolume(float volume)
         {
-            using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            using var device = GetOutputDevice(null);
             volume = Math.Clamp(volume, 0f, 1f);
 
             if(device != null) device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
+        }
+
+        public void SetSystemVolume(float volume, string? outputDeviceName)
+        {
+            using var device = GetOutputDevice(outputDeviceName);
+            volume = Math.Clamp(volume, 0f, 1f);
+
+            if (device != null) device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
         }
 
         public void SetMicVolume(string micName, float volume)
@@ -146,6 +154,28 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
             return sessions;
+        }
+
+        public List<MMDevice> GetOutputDevices()
+        {
+            var outputDevices = new List<MMDevice>();
+            var devices = _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+
+            foreach (var device in devices)
+            {
+                outputDevices.Add(device);
+            }
+
+            return outputDevices;
+        }
+
+        private MMDevice? GetOutputDevice(string? outputDeviceName)
+        {
+            if (string.IsNullOrWhiteSpace(outputDeviceName))
+                return _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+
+            return GetOutputDevices().FirstOrDefault(d => d.DeviceFriendlyName == outputDeviceName)
+                   ?? _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
         }
     }
 }
