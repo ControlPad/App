@@ -7,6 +7,11 @@ namespace ControlPad
 {
     public static class GameDetector
     {
+        private static readonly string[] LauncherAndUtilityKeywords =
+        {
+            "unins", "setup", "crash", "report", "installer", "launcher", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup", "support"
+        };
+
         private static readonly string[] KnownGameFolders =
         {
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "steamapps", "common"),
@@ -122,12 +127,7 @@ namespace ControlPad
 
             string value = name.Trim();
 
-            string[] launcherAndUtilityKeywords =
-            {
-                "unins", "setup", "crash", "report", "installer", "launcher", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup", "support"
-            };
-
-            if (launcherAndUtilityKeywords.Any(k => value.Contains(k, StringComparison.OrdinalIgnoreCase)))
+            if (LauncherAndUtilityKeywords.Any(k => value.Contains(k, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
             return true;

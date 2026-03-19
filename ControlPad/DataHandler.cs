@@ -264,7 +264,7 @@ namespace ControlPad
             gamesCategory.AudioStreams = new System.Collections.ObjectModel.ObservableCollection<AudioStream>(refreshedStreams);
             SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
 
-            return detectedGames.Count;
+            return refreshedStreams.Count(s => s.IsAutoDetected);
         }
     }
 }
