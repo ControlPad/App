@@ -24,6 +24,8 @@ namespace ControlPad
         private static readonly StringBuilder _lineBuf = new();
         private static BoardType _lastBoardType = BoardType.None;
         private static BadgeType _lastBadgeType = BadgeType.None;
+        private static long _lastEventDispatchTick;
+        private const int EventDispatchIntervalMs = 16;
 
         public static void Initialize(MainWindow mainWindow, EventHandler eventHandler)
         {
@@ -202,7 +204,13 @@ namespace ControlPad
 
                 UpdateValues(inputs[2..]);
 
-                // UI-Updates ggf. drosseln
+                long nowTick = Environment.TickCount64;
+                if (nowTick - _lastEventDispatchTick < EventDispatchIntervalMs)
+                {
+                    return;
+                }
+                _lastEventDispatchTick = nowTick;
+
                 _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() =>
                     _eventHandler.Update(DataHandler.SliderValues, DataHandler.ButtonValues)
                 );

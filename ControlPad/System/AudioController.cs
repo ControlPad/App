@@ -6,12 +6,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Linq;
 
 namespace ControlPad
 {
     public class AudioController
     {
         private MMDeviceEnumerator _enum;
+        private readonly Dictionary<string, (long Tick, HashSet<int> ProcessIds)> _processIdsCache = new();
+        private const int ProcessIdsCacheLifetimeMs = 500;
 
         public AudioController()
         { 
@@ -24,7 +27,7 @@ namespace ControlPad
 
             volume = Math.Clamp(volume, 0f, 1f);
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            HashSet<int> processIds = GetProcessIds(processName);
             
 
             for (int i = 0; i < sessions?.Count; i++)
@@ -61,7 +64,7 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            HashSet<int> processIds = GetProcessIds(processName);
 
             for (int i = 0; i < sessions?.Count; i++)
             {
@@ -94,7 +97,7 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
 
-            List<int> processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToList(); // this might be slow
+            HashSet<int> processIds = GetProcessIds(processName);
 
             for (int i = 0; i < sessions?.Count; i++)
             {
@@ -146,6 +149,22 @@ namespace ControlPad
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             var sessions = device.AudioSessionManager.Sessions;
             return sessions;
+        }
+
+        private HashSet<int> GetProcessIds(string processName)
+        {
+            long nowTick = Environment.TickCount64;
+            if (_processIdsCache.TryGetValue(processName, out var cacheEntry))
+            {
+                if (nowTick - cacheEntry.Tick <= ProcessIdsCacheLifetimeMs)
+                {
+                    return cacheEntry.ProcessIds;
+                }
+            }
+
+            var processIds = Process.GetProcessesByName(processName).Select(c => c.Id).ToHashSet();
+            _processIdsCache[processName] = (nowTick, processIds);
+            return processIds;
         }
     }
 }
