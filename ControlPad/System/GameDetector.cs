@@ -10,7 +10,7 @@ namespace ControlPad
     {
         private static readonly string[] LauncherAndUtilityKeywords =
         {
-            "unins", "setup", "installer", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup"
+            "unins", "setup", "installer", "redistributable", "easyanticheat", "battleye", "updater", "vc_redist", "dxsetup", "crashreport"
         };
 
         private static readonly string[] KnownGameFolders =
@@ -129,9 +129,6 @@ namespace ControlPad
 
             string lowerValue = value.ToLowerInvariant();
             if (LauncherAndUtilityKeywords.Any(k => lowerValue.Contains(k)))
-                return false;
-
-            if (lowerValue.Contains("crashreport"))
                 return false;
 
             return true;
