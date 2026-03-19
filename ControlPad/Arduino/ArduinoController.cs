@@ -209,7 +209,7 @@ namespace ControlPad
                 lock (_eventDispatchLock)
                 {
                     long nowTick = Environment.TickCount64;
-                    if (nowTick - _lastEventDispatchTick >= EventDispatchIntervalMs)
+                    if ((nowTick - _lastEventDispatchTick) >= EventDispatchIntervalMs)
                     {
                         _lastEventDispatchTick = nowTick;
                         shouldDispatch = true;

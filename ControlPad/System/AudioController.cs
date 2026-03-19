@@ -16,6 +16,8 @@ namespace ControlPad
         private MMDeviceEnumerator _enum;
         private readonly ConcurrentDictionary<string, (long Tick, int[] ProcessIds)> _processIdsCache = new();
         private const int ProcessIdsCacheLifetimeMs = 500;
+        private const int ProcessIdsCacheMaxEntries = 128;
+        private long _lastProcessCacheTrimTick = Environment.TickCount64;
 
         public AudioController()
         { 
@@ -157,7 +159,7 @@ namespace ControlPad
             long nowTick = Environment.TickCount64;
             if (_processIdsCache.TryGetValue(processName, out var cacheEntry))
             {
-                if (nowTick - cacheEntry.Tick <= ProcessIdsCacheLifetimeMs)
+                if ((nowTick - cacheEntry.Tick) <= ProcessIdsCacheLifetimeMs)
                 {
                     return cacheEntry.ProcessIds;
                 }
@@ -171,7 +173,35 @@ namespace ControlPad
                 processes[i].Dispose();
             }
             _processIdsCache[processName] = (nowTick, processIds);
+            long lastTrimTick = Interlocked.Read(ref _lastProcessCacheTrimTick);
+            if (_processIdsCache.Count >= ProcessIdsCacheMaxEntries ||
+                (nowTick - lastTrimTick) > ProcessIdsCacheLifetimeMs)
+            {
+                TrimProcessCache(nowTick);
+                Interlocked.Exchange(ref _lastProcessCacheTrimTick, nowTick);
+            }
             return processIds;
+        }
+
+        private void TrimProcessCache(long nowTick)
+        {
+            var staleKeys = _processIdsCache
+                .Where(entry => (nowTick - entry.Value.Tick) > ProcessIdsCacheLifetimeMs)
+                .Select(entry => entry.Key)
+                .ToList();
+            foreach (var key in staleKeys)
+                _processIdsCache.TryRemove(key, out _);
+
+            int overflow = _processIdsCache.Count - ProcessIdsCacheMaxEntries;
+            if (overflow <= 0) return;
+
+            var oldestKeys = _processIdsCache
+                .OrderBy(entry => entry.Value.Tick)
+                .Take(overflow)
+                .Select(entry => entry.Key)
+                .ToList();
+            foreach (var key in oldestKeys)
+                _processIdsCache.TryRemove(key, out _);
         }
     }
 }
