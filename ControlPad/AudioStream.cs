@@ -1,5 +1,4 @@
-﻿using NAudio.CoreAudioApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +16,12 @@ namespace ControlPad
         {
             Process = process;
             MicName = micName;
+            DisplayName = "Main Audio";
 
             if (MicName != null)
                 DisplayName = MicName;
             else if (Process != null)
                 DisplayName = Process;
-            else if (MicName == null && Process == null)
-                DisplayName = "Main Audio";
         }
     }
 }
