@@ -13,6 +13,7 @@ namespace ControlPad
 {
     public static class DataHandler
     {
+        public const string GamesCategoryName = "Games";
         public static string AppDataRoaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static Preset CurrentPreset { get; set; } = new Preset(0, "Preset1 (current)");
         public static string GetSliderCategoriesPath() => Path.Combine(AppDataRoaming, GetPresetPath(CurrentPreset.Id) ?? @$"Slidr\Presets\{CurrentPreset.Name}", "SliderCategories.json");
@@ -219,18 +220,17 @@ namespace ControlPad
 
         public static SliderCategory EnsureGamesCategory()
         {
-            const string gamesCategoryName = "Games";
-            var gamesCategory = SliderCategories.FirstOrDefault(c => string.Equals(c.Name, gamesCategoryName, StringComparison.OrdinalIgnoreCase));
+            var gamesCategory = SliderCategories.FirstOrDefault(c => string.Equals(c.Name, GamesCategoryName, StringComparison.OrdinalIgnoreCase));
 
             if (gamesCategory == null)
             {
-                gamesCategory = new SliderCategory(gamesCategoryName, SliderCategories.GetFreeId(c => c.Id));
+                gamesCategory = new SliderCategory(GamesCategoryName, SliderCategories.GetFreeId(c => c.Id));
                 SliderCategories.Add(gamesCategory);
                 SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
             }
-            else if (gamesCategory.Name != gamesCategoryName)
+            else if (gamesCategory.Name != GamesCategoryName)
             {
-                gamesCategory.Name = gamesCategoryName;
+                gamesCategory.Name = GamesCategoryName;
                 SaveDataToFile(GetSliderCategoriesPath(), SliderCategories.ToList());
             }
 

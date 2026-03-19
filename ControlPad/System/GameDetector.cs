@@ -58,7 +58,7 @@ namespace ControlPad
                     if (string.IsNullOrWhiteSpace(value))
                         continue;
 
-                    string resolvedPath = value.Replace(@"\\", @"\");
+                    string resolvedPath = value.Replace(@"\\\\", @"\");
                     string commonPath = Path.Combine(resolvedPath, "steamapps", "common");
                     CollectExecutableNames(commonPath, names, 4);
                 }
@@ -127,7 +127,8 @@ namespace ControlPad
 
             string value = name.Trim();
 
-            if (LauncherAndUtilityKeywords.Any(k => value.Contains(k, StringComparison.OrdinalIgnoreCase)))
+            string lowerValue = value.ToLowerInvariant();
+            if (LauncherAndUtilityKeywords.Any(k => lowerValue.Contains(k)))
                 return false;
 
             return true;

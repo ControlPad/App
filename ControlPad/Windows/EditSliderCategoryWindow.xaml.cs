@@ -16,7 +16,7 @@ namespace ControlPad
             tb_CategoryName.Text = DataHandler.SliderCategories[indexOfCategory].Name;
             lb_AudioStreams.ItemsSource = DataHandler.SliderCategories[indexOfCategory].AudioStreams;
             lb_AudioStreams.DisplayMemberPath = "DisplayName";
-            btn_DetectGames.Visibility = string.Equals(DataHandler.SliderCategories[indexOfCategory].Name, "Games", StringComparison.OrdinalIgnoreCase)
+            btn_DetectGames.Visibility = string.Equals(DataHandler.SliderCategories[indexOfCategory].Name, DataHandler.GamesCategoryName, StringComparison.OrdinalIgnoreCase)
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }
