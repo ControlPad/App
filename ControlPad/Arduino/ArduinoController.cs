@@ -26,6 +26,7 @@ namespace ControlPad
         private static BadgeType _lastBadgeType = BadgeType.None;
         private static long _lastEventDispatchTick;
         private const int EventDispatchIntervalMs = 16;
+        private static readonly object _eventDispatchLock = new();
 
         public static void Initialize(MainWindow mainWindow, EventHandler eventHandler)
         {
@@ -204,12 +205,21 @@ namespace ControlPad
 
                 UpdateValues(inputs[2..]);
 
-                long nowTick = Environment.TickCount64;
-                if (nowTick - _lastEventDispatchTick < EventDispatchIntervalMs)
+                bool shouldDispatch = false;
+                lock (_eventDispatchLock)
+                {
+                    long nowTick = Environment.TickCount64;
+                    if (nowTick - _lastEventDispatchTick >= EventDispatchIntervalMs)
+                    {
+                        _lastEventDispatchTick = nowTick;
+                        shouldDispatch = true;
+                    }
+                }
+
+                if (!shouldDispatch)
                 {
                     return;
                 }
-                _lastEventDispatchTick = nowTick;
 
                 _mainWindow._homeUserControl.Dispatcher.BeginInvoke(() =>
                     _eventHandler.Update(DataHandler.SliderValues, DataHandler.ButtonValues)
