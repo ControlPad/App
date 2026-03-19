@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ControlPad
 {
@@ -21,7 +22,6 @@ namespace ControlPad
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "EA Games"),
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "GOG Galaxy", "Games"),
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "GOG Galaxy", "Games"),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Battle.net", "Agent", "data"),
         };
 
         public static List<string> DetectGameProcessNames()
@@ -58,7 +58,7 @@ namespace ControlPad
                     if (string.IsNullOrWhiteSpace(value))
                         continue;
 
-                    string resolvedPath = value.Replace(@"\\", @"\");
+                    string resolvedPath = Regex.Unescape(value);
                     string commonPath = Path.Combine(resolvedPath, "steamapps", "common");
                     CollectExecutableNames(commonPath, names, 4);
                 }
@@ -129,9 +129,6 @@ namespace ControlPad
 
             string lowerValue = value.ToLowerInvariant();
             if (LauncherAndUtilityKeywords.Any(k => lowerValue.Contains(k)))
-                return false;
-
-            if (lowerValue.EndsWith("_launcher") || lowerValue.EndsWith("launcher"))
                 return false;
 
             if (lowerValue.Contains("crashreport"))
