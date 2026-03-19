@@ -5,6 +5,8 @@
 ControlPad/bin/
 ControlPad/obj/
 ControlPad/publish/
+ControlPad.Tests/bin/
+ControlPad.Tests/obj/
 
 *.user
 *.suo

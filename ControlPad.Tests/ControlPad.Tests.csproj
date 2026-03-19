@@ -25,7 +25,7 @@
     <Compile Include="../ControlPad/ButtonCategory.cs" Link="Source/ButtonCategory.cs" />
     <Compile Include="../ControlPad/Preset.cs" Link="Source/Preset.cs" />
     <Compile Include="../ControlPad/SliderCategory.cs" Link="Source/SliderCategory.cs" />
-    <Compile Include="../ControlPad/Math/SliderValueConverter.cs" Link="Source/SliderValueConverter.cs" />
+    <Compile Include="../ControlPad/Converters/SliderValueConverter.cs" Link="Source/SliderValueConverter.cs" />
     <Compile Include="../ControlPad/Utils/IdAllocator.cs" Link="Source/IdAllocator.cs" />
   </ItemGroup>
 
