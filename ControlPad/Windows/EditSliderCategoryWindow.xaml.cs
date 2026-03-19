@@ -73,7 +73,7 @@ namespace ControlPad
             int count = DataHandler.RefreshAutoDetectedGames();
             lb_AudioStreams.ItemsSource = DataHandler.SliderCategories[indexOfCategory].AudioStreams;
             lb_AudioStreams.Items.Refresh();
-            MessageBox.Show($"Detected {count} games.", "Slidr", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show($"Detected {count} games.", "Slidr", System.Windows.MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

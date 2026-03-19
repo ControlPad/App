@@ -1,4 +1,9 @@
-﻿namespace ControlPad
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace ControlPad
 {
     public static class GameDetector
     {
