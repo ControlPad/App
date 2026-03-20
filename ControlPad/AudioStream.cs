@@ -1,8 +1,9 @@
-﻿using NAudio.CoreAudioApi;
+using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ControlPad
@@ -32,6 +33,7 @@ namespace ControlPad
             MicName = micName;
         }
 
+        [JsonConstructor]
         public AudioStream(string? process, string? micName, string? deviceName)
         {
             Process = process;
