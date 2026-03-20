@@ -231,6 +231,27 @@
                     <ui:Button x:Name="Btn_Presets" Content="Presets" Click="Btn_Presets_Click" MinWidth="180" Grid.Column="1"/>
                 </Grid>
 
+                <!-- App Version -->
+                <Grid Margin="0,8,0,0" Grid.Row="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                        <Label Content="App version"
+                           Padding="0"/>
+                        <Label Content="Current version of the app."
+                           Padding="0"
+                           Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </StackPanel>
+
+                    <Label x:Name="lbl_AppVersion"
+                       Content=""
+                       Grid.Column="1"
+                       VerticalAlignment="Center"/>
+                </Grid>
+
             </Grid>
         </StackPanel>
     </Border>
