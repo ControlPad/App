@@ -67,7 +67,7 @@ namespace ControlPad
                         else if (stream.MicName != null)
                             Task.Run(() => AudioController.MuteMic(stream.MicName, false));
                         else if (stream.Process == null && stream.MicName == null)
-                            Task.Run(() => AudioController.MuteSystem(false));
+                            Task.Run(() => AudioController.MuteSystem(false, stream.DeviceName));
                     }
 
                     if (stream.Process != null)

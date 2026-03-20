@@ -15,8 +15,10 @@ namespace ControlPad
     {
         private MMDeviceEnumerator _enum;
         private readonly ConcurrentDictionary<string, (long Tick, int[] ProcessIds)> _processIdsCache = new();
+        private readonly ConcurrentDictionary<string, (long Tick, string DeviceId)> _outputDeviceIdCache = new();
         private const int ProcessIdsCacheLifetimeMs = 500;
         private const int ProcessIdsCacheMaxEntries = 128;
+        private const int OutputDeviceCacheLifetimeMs = 3000;
         private long _lastProcessCacheTrimTick = Environment.TickCount64;
 
         public AudioController()
@@ -89,7 +91,13 @@ namespace ControlPad
 
         public void MuteSystem(bool mute)
         {
-            using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            using var device = GetOutputDevice(null);
+            if (device != null) device.AudioEndpointVolume.Mute = mute;
+        }
+
+        public void MuteSystem(bool mute, string? outputDeviceName)
+        {
+            using var device = GetOutputDevice(outputDeviceName);
             if (device != null) device.AudioEndpointVolume.Mute = mute;
         }
 
@@ -123,7 +131,14 @@ namespace ControlPad
 
         public bool IsSystemMute()
         {
-            using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            using var device = GetOutputDevice(null);
+            if (device != null) return device.AudioEndpointVolume.Mute;
+            return false;
+        }
+
+        public bool IsSystemMute(string? outputDeviceName)
+        {
+            using var device = GetOutputDevice(outputDeviceName);
             if (device != null) return device.AudioEndpointVolume.Mute;
             return false;
         }
@@ -222,8 +237,28 @@ namespace ControlPad
             if (string.IsNullOrWhiteSpace(outputDeviceName))
                 return _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
 
-            return GetOutputDevices().FirstOrDefault(d => d.DeviceFriendlyName == outputDeviceName)
-                   ?? _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            long nowTick = Environment.TickCount64;
+            if (_outputDeviceIdCache.TryGetValue(outputDeviceName, out var cacheEntry) &&
+                (nowTick - cacheEntry.Tick) <= OutputDeviceCacheLifetimeMs)
+            {
+                try
+                {
+                    return _enum.GetDevice(cacheEntry.DeviceId);
+                }
+                catch
+                {
+                    _outputDeviceIdCache.TryRemove(outputDeviceName, out _);
+                }
+            }
+
+            var device = GetOutputDevices().FirstOrDefault(d => d.DeviceFriendlyName == outputDeviceName);
+            if (device != null)
+            {
+                _outputDeviceIdCache[outputDeviceName] = (nowTick, device.ID);
+                return device;
+            }
+
+            return _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
         }
     }
 }
