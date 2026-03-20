@@ -63,23 +63,30 @@ namespace ControlPad
 
                     Task.Run(() =>
                     {
-                        if (stream.Process != null)
+                        try
                         {
-                            if (Settings.UnmuteOnSliderChange)
-                                AudioController.MuteProcess(stream.Process, false);
-                            AudioController.SetProcessVolume(stream.Process, volume);
+                            if (stream.Process != null)
+                            {
+                                if (Settings.UnmuteOnSliderChange)
+                                    AudioController.MuteProcess(stream.Process, false);
+                                AudioController.SetProcessVolume(stream.Process, volume);
+                            }
+                            else if (stream.MicName != null)
+                            {
+                                if (Settings.UnmuteOnSliderChange)
+                                    AudioController.MuteMic(stream.MicName, false);
+                                AudioController.SetMicVolume(stream.MicName, volume);
+                            }
+                            else if (stream.Process == null && stream.MicName == null)
+                            {
+                                if (Settings.UnmuteOnSliderChange)
+                                    AudioController.MuteSystem(false, stream.DeviceName);
+                                AudioController.SetSystemVolume(volume, stream.DeviceName);
+                            }
                         }
-                        else if (stream.MicName != null)
+                        catch (Exception ex)
                         {
-                            if (Settings.UnmuteOnSliderChange)
-                                AudioController.MuteMic(stream.MicName, false);
-                            AudioController.SetMicVolume(stream.MicName, volume);
-                        }
-                        else if (stream.Process == null && stream.MicName == null)
-                        {
-                            if (Settings.UnmuteOnSliderChange)
-                                AudioController.MuteSystem(false, stream.DeviceName);
-                            AudioController.SetSystemVolume(volume, stream.DeviceName);
+                            Debug.WriteLine(ex);
                         }
                     });
                 }                            

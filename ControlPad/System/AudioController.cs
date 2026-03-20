@@ -175,6 +175,10 @@ namespace ControlPad
             return names;
         }
 
+        /// <summary>
+        /// Resolves an active capture endpoint by friendly name using a short-lived ID cache.
+        /// Returned device instance must be disposed by the caller.
+        /// </summary>
         private MMDevice? GetMic(string micName)
         {
             if (string.IsNullOrWhiteSpace(micName))
@@ -202,10 +206,7 @@ namespace ControlPad
                     matchedDevice = device;
                     break;
                 }
-                else
-                {
-                    device.Dispose();
-                }
+                device.Dispose();
             }
 
             if (matchedDevice != null)
