@@ -197,9 +197,10 @@ namespace ControlPad
             MMDevice? matchedDevice = null;
             foreach (var device in _enum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
             {
-                if (matchedDevice == null && device.DeviceFriendlyName == micName)
+                if (device.DeviceFriendlyName == micName)
                 {
                     matchedDevice = device;
+                    break;
                 }
                 else
                 {
