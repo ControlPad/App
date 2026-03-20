@@ -49,7 +49,7 @@ namespace ControlPad
 
             if (dialog.ShowDialog() == true)
             {
-                DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(new AudioStream(null, dialog.SelectedMic?.DeviceFriendlyName));
+                DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(new AudioStream(null, dialog.SelectedMicName));
             }
         }
 
@@ -74,7 +74,7 @@ namespace ControlPad
             if (dialog.ShowDialog() == true)
             {
                 DataHandler.SliderCategories[indexOfCategory].AudioStreams.Add(
-                    new AudioStream(null, null, dialog.SelectedOutputDevice?.DeviceFriendlyName)
+                    new AudioStream(null, null, dialog.SelectedOutputDeviceName)
                 );
             }
         }

@@ -15,6 +15,11 @@ namespace ControlPad
         private static bool _startMinimized = false;
         private static bool _minimizeToSystemTray = true;
         private static double _translationExponent = 1d;
+        private static string _translationCurvePreset = "linear";
+        private static double _translationCurveX1 = 0d;
+        private static double _translationCurveY1 = 0d;
+        private static double _translationCurveX2 = 1d;
+        private static double _translationCurveY2 = 1d;
         private static int _selectedThemeIndex = 0;
         private static int _selectedBackgroundIndex = 3;
         private static int _sliderDeadZone = 4;
@@ -115,6 +120,56 @@ namespace ControlPad
             }
         }
 
+        public static string TranslationCurvePreset
+        {
+            get => _translationCurvePreset;
+            set
+            {
+                _translationCurvePreset = SliderTranslationCurve.IsSupportedPreset(value) ? value : "linear";
+                Save();
+            }
+        }
+
+        public static double TranslationCurveX1
+        {
+            get => _translationCurveX1;
+            set
+            {
+                _translationCurveX1 = Math.Clamp(value, 0d, 1d);
+                Save();
+            }
+        }
+
+        public static double TranslationCurveY1
+        {
+            get => _translationCurveY1;
+            set
+            {
+                _translationCurveY1 = Math.Clamp(value, 0d, 1d);
+                Save();
+            }
+        }
+
+        public static double TranslationCurveX2
+        {
+            get => _translationCurveX2;
+            set
+            {
+                _translationCurveX2 = Math.Clamp(value, 0d, 1d);
+                Save();
+            }
+        }
+
+        public static double TranslationCurveY2
+        {
+            get => _translationCurveY2;
+            set
+            {
+                _translationCurveY2 = Math.Clamp(value, 0d, 1d);
+                Save();
+            }
+        }
+
         private class Data
         {
             public bool TrayIconMessageShown { get; set; } = false;
@@ -122,6 +177,11 @@ namespace ControlPad
             public bool StartMinimized { get; set; } = true;
             public bool MinimizeToSystemTray { get; set; } = true;
             public double TranslationExponent { get; set; } = 1d;
+            public string TranslationCurvePreset { get; set; } = "linear";
+            public double TranslationCurveX1 { get; set; } = 0d;
+            public double TranslationCurveY1 { get; set; } = 0d;
+            public double TranslationCurveX2 { get; set; } = 1d;
+            public double TranslationCurveY2 { get; set; } = 1d;
             public int SelectedThemeIndex { get; set; } = 0;
             public int SelectedBackgroundIndex { get; set; } = 3;
             public int SliderDeadZone { get; set; } = 4;
@@ -148,6 +208,11 @@ namespace ControlPad
                 _selectedBackgroundIndex = data.SelectedBackgroundIndex;
                 _sliderDeadZone = data.SliderDeadZone;
                 _translationExponent = data.TranslationExponent;
+                _translationCurvePreset = SliderTranslationCurve.IsSupportedPreset(data.TranslationCurvePreset) ? data.TranslationCurvePreset : "linear";
+                _translationCurveX1 = Math.Clamp(data.TranslationCurveX1, 0d, 1d);
+                _translationCurveY1 = Math.Clamp(data.TranslationCurveY1, 0d, 1d);
+                _translationCurveX2 = Math.Clamp(data.TranslationCurveX2, 0d, 1d);
+                _translationCurveY2 = Math.Clamp(data.TranslationCurveY2, 0d, 1d);
                 _unmuteOnSliderChange = data.UnmuteOnSliderChange;
             }
             catch
@@ -170,6 +235,11 @@ namespace ControlPad
                     SelectedBackgroundIndex = _selectedBackgroundIndex,
                     SliderDeadZone = _sliderDeadZone,
                     TranslationExponent = _translationExponent,
+                    TranslationCurvePreset = _translationCurvePreset,
+                    TranslationCurveX1 = _translationCurveX1,
+                    TranslationCurveY1 = _translationCurveY1,
+                    TranslationCurveX2 = _translationCurveX2,
+                    TranslationCurveY2 = _translationCurveY2,
                     UnmuteOnSliderChange = _unmuteOnSliderChange,
                 };
 

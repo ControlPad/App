@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+using ControlPad.Converters;
+using System.Diagnostics;
 
 namespace ControlPad
 {
@@ -67,7 +68,7 @@ namespace ControlPad
                         else if (stream.MicName != null)
                             Task.Run(() => AudioController.MuteMic(stream.MicName, false));
                         else if (stream.Process == null && stream.MicName == null)
-                            Task.Run(() => AudioController.MuteSystem(false));
+                            Task.Run(() => AudioController.MuteSystem(false, stream.DeviceName));
                     }
 
                     if (stream.Process != null)
@@ -189,7 +190,7 @@ namespace ControlPad
             if (normalized < 0.005f)
                 return 0f;
 
-            return (float)Math.Pow(normalized, Settings.TranslationExponent);
+            return SliderTranslationCurve.Apply(normalized);
         }
     }
 }

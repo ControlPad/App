@@ -125,9 +125,9 @@ namespace ControlPad
 
                         if (micDialog.ShowDialog() == true)
                         {
-                            control.ButtonAction.ActionProperty = micDialog.SelectedMic?.DeviceFriendlyName;
-                            control.ButtonAction.ActionPropertyDisplay = micDialog.SelectedMic?.DeviceFriendlyName;
-                            control.TextBlock.Text = $"{control.ButtonAction.ActionType.Description}: {micDialog.SelectedMic?.DeviceFriendlyName}";
+                            control.ButtonAction.ActionProperty = micDialog.SelectedMicName;
+                            control.ButtonAction.ActionPropertyDisplay = micDialog.SelectedMicName;
+                            control.TextBlock.Text = $"{control.ButtonAction.ActionType.Description}: {micDialog.SelectedMicName}";
                         }
                         break;
                     }                   

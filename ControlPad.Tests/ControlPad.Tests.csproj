@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../ControlPad/AudioStream.cs" Link="Source/AudioStream.cs" />
+    <Compile Include="../ControlPad/ActionType.cs" Link="Source/ActionType.cs" />
+    <Compile Include="../ControlPad/ButtonAction.cs" Link="Source/ButtonAction.cs" />
+    <Compile Include="../ControlPad/ButtonCategory.cs" Link="Source/ButtonCategory.cs" />
+    <Compile Include="../ControlPad/Preset.cs" Link="Source/Preset.cs" />
+    <Compile Include="../ControlPad/SliderCategory.cs" Link="Source/SliderCategory.cs" />
+    <Compile Include="../ControlPad/Converters/SliderValueConverter.cs" Link="Source/SliderValueConverter.cs" />
+    <Compile Include="../ControlPad/Utils/IdAllocator.cs" Link="Source/IdAllocator.cs" />
+  </ItemGroup>
+
+</Project>
