@@ -8,143 +8,145 @@
              mc:Ignorable="d" 
              Width="579" Height="550"
              >
-
+    
     <Border Padding="16">
-        <StackPanel>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
 
-                <ui:TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontTypography="Title" Text="Settings" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <Label Content="Adjust how the app behaves and looks."
+                    <ui:TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontTypography="Title" Text="Settings" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Label Content="Adjust how the app behaves and looks."
                    Padding="0"
                    Margin="0,35,0,15"
                    Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
 
-                <!-- Start with Windows -->
-                <Grid Margin="0,8,0,8" Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Start with Windows -->
+                    <Grid Margin="0,8,0,8" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <!-- Label with mnemonic + Target -->
-                        <Label Content="_Start with Windows"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <!-- Label with mnemonic + Target -->
+                            <Label Content="_Start with Windows"
                            Padding="0"
                            Target="{Binding ElementName=cb_StartWithWindows}"/>
-                        <Label Content="Launch the app automatically after you sign in."
+                            <Label Content="Launch the app automatically after you sign in."
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <CheckBox x:Name="cb_StartWithWindows"
+                        <CheckBox x:Name="cb_StartWithWindows"
                           Checked="cb_StartWithWindows_Checked" 
                           Unchecked="cb_StartWithWindows_Checked"
                           Grid.Column="1"
                           VerticalAlignment="Center"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Start minimized -->
-                <Grid x:Name="GridStartMinimized" Margin="0,8,0,8" Grid.Row="2" IsEnabled="False" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Start minimized -->
+                    <Grid x:Name="GridStartMinimized" Margin="0,8,0,8" Grid.Row="2" IsEnabled="False" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <!-- Label with mnemonic + Target -->
-                        <Label Content="_Start minimized"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <!-- Label with mnemonic + Target -->
+                            <Label Content="_Start minimized"
                             Padding="0"
                             Target="{Binding ElementName=cb_StartMinimized}"/>
-                        <Label Content="Launch the app in the background."
+                            <Label Content="Launch the app in the background."
                             Padding="0"
                             Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <CheckBox x:Name="cb_StartMinimized"
+                        <CheckBox x:Name="cb_StartMinimized"
                         IsChecked="True"
                         Checked="cb_StartMinimized_Checked"
                         Unchecked="cb_StartMinimized_Checked"
                         Grid.Column="1"
                         VerticalAlignment="Center" />
-                </Grid>
+                    </Grid>
 
-                <!-- Minimize to System Tray -->
-                <Grid Margin="0,8,0,8" Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Minimize to System Tray -->
+                    <Grid Margin="0,8,0,8" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="Mi_nimize to system tray"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="Mi_nimize to system tray"
                            Padding="0"
                            Target="{Binding ElementName=cb_MinimizeToTray}"/>
-                        <Label Content="When closing, keep the app running in the system tray."
+                            <Label Content="When closing, keep the app running in the system tray."
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <CheckBox x:Name="cb_MinimizeToTray"
+                        <CheckBox x:Name="cb_MinimizeToTray"
                           Grid.Column="1"
                           IsChecked="True"
                           VerticalAlignment="Center" 
                           Checked="cb_MinimizeToTray_Checked" 
                           Unchecked="cb_MinimizeToTray_Checked"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Unmute on slider change -->
-                <Grid Margin="0,8,0,8" Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Unmute on slider change -->
+                    <Grid Margin="0,8,0,8" Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="_Unmute on slider change"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="_Unmute on slider change"
                            Padding="0"
                            Target="{Binding ElementName=cb_UnmuteOnSliderChange}"/>
-                        <Label Content="Automatically unmute a process when its slider is moved."
+                            <Label Content="Automatically unmute a process when its slider is moved."
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <CheckBox x:Name="cb_UnmuteOnSliderChange"
+                        <CheckBox x:Name="cb_UnmuteOnSliderChange"
                           Grid.Column="1"
                           IsChecked="True"
                           VerticalAlignment="Center"
                           Checked="cb_UnmuteOnSliderChange_Checked"
                           Unchecked="cb_UnmuteOnSliderChange_Checked"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Translation Exponent -->
-                <Grid Margin="0,8,0,0" Grid.Row="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Translation Exponent -->
+                    <Grid Margin="0,8,0,0" Grid.Row="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="Translation _exponent"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="Translation _exponent"
                             Padding="0"
                             Target="{Binding ElementName=ThemeComboBox}"/>
-                        <Label Content="Exponent controlling the mapping curve from slider to&#x0a;sound bar."
+                            <Label Content="Exponent controlling the mapping curve from slider to&#x0a;sound bar."
                             Padding="0"
                             Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <ui:NumberBox x:Name="nb_TranslationExponent"
+                        <ui:NumberBox x:Name="nb_TranslationExponent"
                         PlaceholderText="1.0" 
                         Grid.ColumnSpan="2" 
                         Margin="367,0,0,0" 
@@ -153,106 +155,107 @@
                         Minimum="0.1"
                         ValidationMode="InvalidInputOverwritten" ValueChanged="nb_TranslationExponent_ValueChanged"
                         />
-                </Grid>
+                    </Grid>
 
-                <!-- App Theme -->
-                <Grid Margin="0,8,0,0" Grid.Row="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- App Theme -->
+                    <Grid Margin="0,8,0,0" Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="App _theme"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="App _theme"
                            Padding="0"
                            Target="{Binding ElementName=ThemeComboBox}"/>
-                        <Label Content="Choose how the app looks.&#x0a;"
+                            <Label Content="Choose how the app looks.&#x0a;"
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <ComboBox x:Name="ThemeComboBox"
+                        <ComboBox x:Name="ThemeComboBox"
                           Grid.Column="1"
                           MinWidth="180"
                           SelectedIndex="0"
                           VerticalAlignment="Center" SelectionChanged="ThemeComboBox_SelectionChanged">
-                        <ComboBoxItem Content="System (Default)"/>
-                        <ComboBoxItem Content="Light"/>
-                        <ComboBoxItem Content="Dark"/>
-                    </ComboBox>
-                </Grid>
+                            <ComboBoxItem Content="System (Default)"/>
+                            <ComboBoxItem Content="Light"/>
+                            <ComboBoxItem Content="Dark"/>
+                        </ComboBox>
+                    </Grid>
 
-                <!-- App Background -->
-                <Grid Margin="0,8,0,0" Grid.Row="7">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- App Background -->
+                    <Grid Margin="0,8,0,0" Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="App _background"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="App _background"
                            Padding="0"
                            Target="{Binding ElementName=ThemeComboBox}"/>
-                        <Label Content="Choose how the app background looks.&#x0a;"
+                            <Label Content="Choose how the app background looks.&#x0a;"
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <ComboBox x:Name="BackgroundComboBox"
+                        <ComboBox x:Name="BackgroundComboBox"
                               Grid.Column="1"
                               MinWidth="180"
                               SelectedIndex="3"
                               VerticalAlignment="Center" SelectionChanged="BackgroundComboBox_SelectionChanged" 
                               >
-                        <ComboBoxItem Content="None"/>
-                        <ComboBoxItem Content="Acrylic"/>
-                        <ComboBoxItem Content="Mica"/>
-                        <ComboBoxItem Content="Nebula"/>
-                        <ComboBoxItem Content="Auto"/>
-                    </ComboBox>
-                </Grid>
+                            <ComboBoxItem Content="None"/>
+                            <ComboBoxItem Content="Acrylic"/>
+                            <ComboBoxItem Content="Mica"/>
+                            <ComboBoxItem Content="Nebula"/>
+                            <ComboBoxItem Content="Auto"/>
+                        </ComboBox>
+                    </Grid>
 
-                <!-- Presets -->
-                <Grid Margin="0,8,0,0" Grid.Row="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Presets -->
+                    <Grid Margin="0,8,0,0" Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="_Presets"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="_Presets"
                             Padding="0"
                             Target="{Binding ElementName=ThemeComboBox}"/>
-                        <Label Content="Create and load presets."
+                            <Label Content="Create and load presets."
                             Padding="0"
                             Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <ui:Button x:Name="Btn_Presets" Content="Presets" Click="Btn_Presets_Click" MinWidth="180" Grid.Column="1"/>
-                </Grid>
+                        <ui:Button x:Name="Btn_Presets" Content="Presets" Click="Btn_Presets_Click" MinWidth="180" Grid.Column="1"/>
+                    </Grid>
 
-                <!-- App Version -->
-                <Grid Margin="0,8,0,0" Grid.Row="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- App Version -->
+                    <Grid Margin="0,8,0,0" Grid.Row="9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                        <Label Content="App version"
+                        <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                            <Label Content="App version"
                            Padding="0"/>
-                        <Label Content="Current version of the app."
+                            <Label Content="Current version of the app."
                            Padding="0"
                            Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <Label x:Name="lbl_AppVersion"
+                        <Label x:Name="lbl_AppVersion"
                        Content=""
                        Grid.Column="1"
                        VerticalAlignment="Center"/>
-                </Grid>
+                    </Grid>
 
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Border>
 </UserControl>
