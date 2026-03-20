@@ -9,12 +9,12 @@
         Icon="pack://application:,,,/Resources/logo.ico"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
-        Title="Please select a runnning process" Width="400" Height="140" MinHeight="20" MinWidth="20">
+        Title="Please select a running process" Width="400" Height="170" MinHeight="20" MinWidth="20">
 
     <DockPanel>
         <ui:TitleBar
 DockPanel.Dock="Top" x:Name="TitleBarSelectProcess"
-        Title="Please select a runnning process"
+        Title="Please select a running process"
         Icon="{ui:ImageIcon 'pack://application:,,,/Resources/logo.ico'}"/>
         
         <Grid>
@@ -22,11 +22,15 @@ DockPanel.Dock="Top" x:Name="TitleBarSelectProcess"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Margin="10 10"
-                      DisplayMemberPath="ProcessName"
+                      DisplayMemberPath="DisplayName"
                       Width="380"
                       IsEditable="False"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,45,10,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,80,0,0">
+                <Button x:Name="btn_AddManual" Content="Add manually (.exe)" Width="165" Click="btn_AddManual_Click"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,80,10,0">
                 <Button x:Name="btn_Ok" Content="OK"  Width="70" Margin="0,0,6,0" Click="btn_Ok_Click"/>
                 <Button x:Name="btn_Cancel" Content="Cancel" Width="70" Click="btn_Cancel_Click"/>
             </StackPanel>

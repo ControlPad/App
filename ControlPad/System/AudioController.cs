@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Linq;
@@ -192,6 +193,17 @@ namespace ControlPad
 
         private int[] GetProcessIds(string processName)
         {
+            if (string.IsNullOrWhiteSpace(processName))
+                return Array.Empty<int>();
+
+            if (ProcessIdentifierHelper.IsExecutablePathIdentifier(processName))
+                return GetProcessIdsByExecutablePath(processName);
+
+            return GetProcessIdsByName(processName);
+        }
+
+        private int[] GetProcessIdsByName(string processName)
+        {
             long nowTick = Environment.TickCount64;
             if (_processIdsCache.TryGetValue(processName, out var cacheEntry))
             {
@@ -219,6 +231,69 @@ namespace ControlPad
                 }
             }
             return processIds;
+        }
+
+        private int[] GetProcessIdsByExecutablePath(string processIdentifier)
+        {
+            var processName = Path.GetFileNameWithoutExtension(processIdentifier);
+            if (string.IsNullOrWhiteSpace(processName))
+                return Array.Empty<int>();
+
+            var matches = new List<int>();
+            var resolvedTargetPath = TryGetFullPath(processIdentifier);
+
+            foreach (var process in Process.GetProcessesByName(processName))
+            {
+                try
+                {
+                    var processPath = process.MainModule?.FileName;
+                    if (string.IsNullOrWhiteSpace(processPath))
+                        continue;
+
+                    if (resolvedTargetPath == null)
+                    {
+                        // Intermediate fallback: when configured path cannot be resolved, collect name matches now.
+                        // Final fallback below handles the case where no matches were collected in this loop.
+                        matches.Add(process.Id);
+                    }
+                    else
+                    {
+                        var resolvedProcessPath = TryGetFullPath(processPath);
+                        if (resolvedProcessPath != null &&
+                            string.Equals(resolvedProcessPath, resolvedTargetPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            matches.Add(process.Id);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore processes where main module cannot be read.
+                }
+                finally
+                {
+                    process.Dispose();
+                }
+            }
+
+            if (matches.Count > 0)
+                return matches.ToArray();
+
+            // If no exact path matches are visible (e.g., inaccessible MainModule), fall back to process name.
+            return GetProcessIdsByName(processName);
+        }
+
+        private static string? TryGetFullPath(string path)
+        {
+            try
+            {
+                return Path.GetFullPath(path);
+            }
+            catch
+            {
+                // Invalid or inaccessible paths should not break process matching; caller handles null as fallback.
+                return null;
+            }
         }
 
         private void TrimProcessCache(long nowTick)
@@ -250,7 +325,6 @@ namespace ControlPad
             foreach (var key in oldestKeys)
                 _processIdsCache.TryRemove(key, out _);
         }
-
         public List<MMDevice> GetOutputDevices()
         {
             return _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).ToList();

@@ -107,13 +107,13 @@ namespace ControlPad
                 case EActionType.MuteProcess:
                     {
                         var processDialog = new SelectProcessPopup { Owner = this };
-                        processDialog.cb_Processes.Text = control.ButtonAction.ActionProperty as string ?? processDialog.cb_Processes.Text;
+                        processDialog.SetInitialSelection(control.ButtonAction.ActionProperty);
 
                         if (processDialog.ShowDialog() == true)
                         {
                             control.ButtonAction.ActionProperty = processDialog.SelectedProcessName;
-                            control.ButtonAction.ActionPropertyDisplay = processDialog.SelectedProcessName;
-                            control.TextBlock.Text = $"{control.ButtonAction.ActionType.Description}: {processDialog.SelectedProcessName}";
+                            control.ButtonAction.ActionPropertyDisplay = processDialog.SelectedProcessDisplayName;
+                            control.TextBlock.Text = $"{control.ButtonAction.ActionType.Description}: {processDialog.SelectedProcessDisplayName}";
                         }
                         break;
                     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -19,7 +20,9 @@ namespace ControlPad
                 if (MicName != null)
                     return MicName;
                 if (Process != null)
-                    return Process;
+                    return ProcessIdentifierHelper.IsExecutablePathIdentifier(Process)
+                        ? Path.GetFileName(Process)
+                        : Process;
                 if (DeviceName != null)
                     return $"Main Audio ({DeviceName})";
                 return "Main Audio";
@@ -31,7 +34,7 @@ namespace ControlPad
             Process = process;
             MicName = micName;
         }
-
+        
         [JsonConstructor]
         public AudioStream(string? process, string? micName, string? deviceName)
         {
