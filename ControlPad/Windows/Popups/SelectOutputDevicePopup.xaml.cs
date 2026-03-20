@@ -1,25 +1,23 @@
-﻿using NAudio.CoreAudioApi;
-using System.Windows;
+﻿using System.Windows;
 using Wpf.Ui.Controls;
 
 namespace ControlPad
 {
     public partial class SelectOutputDevicePopup : FluentWindow
     {
-        public MMDevice? SelectedOutputDevice { get; set; }
+        public string? SelectedOutputDeviceName { get; set; }
 
         public SelectOutputDevicePopup()
         {
             InitializeComponent();
-            cb_OutputDevices.DisplayMemberPath = "DeviceFriendlyName";
-            cb_OutputDevices.ItemsSource = new AudioController().GetOutputDevices();
+            cb_OutputDevices.ItemsSource = new AudioController().GetOutputDeviceNames();
         }
 
         private void btn_Ok_Click(object sender, RoutedEventArgs e)
         {
-            if (cb_OutputDevices.SelectedItem is not MMDevice device) return;
+            if (cb_OutputDevices.SelectedItem is not string outputName) return;
 
-            SelectedOutputDevice = device;
+            SelectedOutputDeviceName = outputName;
             DialogResult = true;
         }
 
