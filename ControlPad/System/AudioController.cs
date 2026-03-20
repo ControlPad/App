@@ -211,25 +211,26 @@ namespace ControlPad
 
         private void TrimProcessCache(long nowTick)
         {
-            var snapshot = _processIdsCache.ToArray();
-            var staleKeys = new List<string>();
-            foreach (var entry in snapshot)
+            var staleEntries = new List<(string Key, long Tick)>();
+            foreach (var entry in _processIdsCache)
             {
                 if ((nowTick - entry.Value.Tick) > ProcessIdsCacheLifetimeMs)
-                    staleKeys.Add(entry.Key);
+                    staleEntries.Add((entry.Key, entry.Value.Tick));
             }
 
-            foreach (var key in staleKeys)
-                _processIdsCache.TryRemove(key, out _);
+            foreach (var entry in staleEntries)
+            {
+                _processIdsCache.TryRemove(entry.Key, out _);
+            }
 
             int overflow = _processIdsCache.Count - ProcessIdsCacheMaxEntries;
             if (overflow <= 0) return;
 
-            var staleKeySet = staleKeys.Count > 0 ? new HashSet<string>(staleKeys) : null;
-            var candidates = staleKeySet == null
-                ? snapshot.AsEnumerable()
-                : snapshot.Where(entry => !staleKeySet.Contains(entry.Key));
-            var oldestKeys = candidates
+            var staleKeySet = staleEntries.Count > 0
+                ? new HashSet<string>(staleEntries.Select(e => e.Key))
+                : null;
+            var oldestKeys = _processIdsCache
+                .Where(entry => staleKeySet == null || !staleKeySet.Contains(entry.Key))
                 .OrderBy(entry => entry.Value.Tick)
                 .Take(overflow)
                 .Select(entry => entry.Key)
@@ -262,11 +263,23 @@ namespace ControlPad
                 }
             }
 
-            var device = GetOutputDevices().FirstOrDefault(d => d.DeviceFriendlyName == outputDeviceName);
-            if (device != null)
+            MMDevice? matchedDevice = null;
+            foreach (var device in _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
             {
-                _outputDeviceIdCache[outputDeviceName] = (nowTick, device.ID);
-                return device;
+                if (matchedDevice == null && device.DeviceFriendlyName == outputDeviceName)
+                {
+                    matchedDevice = device;
+                }
+                else
+                {
+                    device.Dispose();
+                }
+            }
+
+            if (matchedDevice != null)
+            {
+                _outputDeviceIdCache[outputDeviceName] = (nowTick, matchedDevice.ID);
+                return matchedDevice;
             }
 
             return _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
