@@ -7,6 +7,8 @@ ControlPad/obj/
 ControlPad/publish/
 ControlPad.Avalonia/bin/
 ControlPad.Avalonia/obj/
+ControlPad.Tests/bin/
+ControlPad.Tests/obj/
 
 *.user
 *.suo

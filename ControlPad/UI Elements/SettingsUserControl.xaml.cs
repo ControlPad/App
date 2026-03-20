@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +21,8 @@ namespace ControlPad
     {
         private readonly bool _isInitialized = false;
         private readonly MainWindow _mainWindow;
+        private static readonly string[] TranslationCurvePresets = { "ease", "linear", "ease-in", "ease-out", "ease-in-out", "custom" };
+        private bool _suppressCustomCurveEvents = false;
 
         public SettingsUserControl(MainWindow mainWindow)
         {
@@ -88,15 +91,36 @@ namespace ControlPad
             Settings.SelectedBackgroundIndex = BackgroundComboBox.SelectedIndex;
         }
 
-        private void nb_TranslationExponent_ValueChanged(object sender, Wpf.Ui.Controls.NumberBoxValueChangedEventArgs e)
+        private void TranslationCurvePresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_isInitialized)
                 return;
 
-            if (nb_TranslationExponent.Value != null)
-                Settings.TranslationExponent = (double)nb_TranslationExponent.Value;
-            else
-                Settings.TranslationExponent = 1.0d;
+            string preset = TranslationCurvePresets[Math.Clamp(TranslationCurvePresetComboBox.SelectedIndex, 0, TranslationCurvePresets.Length - 1)];
+            Settings.TranslationCurvePreset = preset;
+
+            if (preset != "custom")
+            {
+                var cp = SliderTranslationCurve.GetPresetControlPoints(preset);
+                Settings.TranslationCurveX1 = cp.x1;
+                Settings.TranslationCurveY1 = cp.y1;
+                Settings.TranslationCurveX2 = cp.x2;
+                Settings.TranslationCurveY2 = cp.y2;
+                SetCustomCurveControls(cp.x1, cp.y1, cp.x2, cp.y2);
+            }
+
+            CustomCurveGrid.IsEnabled = preset == "custom";
+        }
+
+        private void nb_CustomCurve_ValueChanged(object sender, Wpf.Ui.Controls.NumberBoxValueChangedEventArgs e)
+        {
+            if (!_isInitialized || _suppressCustomCurveEvents || Settings.TranslationCurvePreset != "custom")
+                return;
+
+            Settings.TranslationCurveX1 = nb_CurveX1.Value ?? 0d;
+            Settings.TranslationCurveY1 = nb_CurveY1.Value ?? 0d;
+            Settings.TranslationCurveX2 = nb_CurveX2.Value ?? 1d;
+            Settings.TranslationCurveY2 = nb_CurveY2.Value ?? 1d;
         }
 
         public static void ChangeAppTheme(int index)
@@ -145,7 +169,30 @@ namespace ControlPad
             cb_UnmuteOnSliderChange.IsChecked = Settings.UnmuteOnSliderChange;
             ThemeComboBox.SelectedIndex = Settings.SelectedThemeIndex;
             BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
-            nb_TranslationExponent.Value = Settings.TranslationExponent;
+            int presetIndex = Array.IndexOf(TranslationCurvePresets, Settings.TranslationCurvePreset);
+            TranslationCurvePresetComboBox.SelectedIndex = presetIndex >= 0 ? presetIndex : 1;
+            SetCustomCurveControls(Settings.TranslationCurveX1, Settings.TranslationCurveY1, Settings.TranslationCurveX2, Settings.TranslationCurveY2);
+            CustomCurveGrid.IsEnabled = Settings.TranslationCurvePreset == "custom";
+
+            var infoVersion = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            lbl_AppVersion.Content = !string.IsNullOrEmpty(infoVersion) ? infoVersion : "Unknown";
+        }
+
+        private void SetCustomCurveControls(double x1, double y1, double x2, double y2)
+        {
+            _suppressCustomCurveEvents = true;
+            try
+            {
+                nb_CurveX1.Value = x1;
+                nb_CurveY1.Value = y1;
+                nb_CurveX2.Value = x2;
+                nb_CurveY2.Value = y2;
+            }
+            finally
+            {
+                _suppressCustomCurveEvents = false;
+            }
         }
 
         private void Btn_Presets_Click(object sender, RoutedEventArgs e)

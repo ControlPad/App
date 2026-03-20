@@ -10,7 +10,18 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <PackageIcon>logo.ico</PackageIcon>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
+
+  <Target Name="SetGitTagVersion" BeforeTargets="GetAssemblyVersion;GenerateNuspec">
+    <Exec Command="git describe --tags --abbrev=0" ConsoleToMSBuild="true" IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitTag" />
+      <Output TaskParameter="ExitCode" PropertyName="GitExitCode" />
+    </Exec>
+    <PropertyGroup Condition="'$(GitExitCode)' == '0' And '$(GitTag)' != ''">
+      <InformationalVersion>$(GitTag)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
 
   <ItemGroup>
     <None Remove="Resources\logo.ico" />

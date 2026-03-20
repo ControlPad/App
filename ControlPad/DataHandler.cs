@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Windows;
 using System.Xml.Linq;
 using Windows.Storage.BulkAccess;
+using ControlPad.Utils;
 
 namespace ControlPad
 {
@@ -90,11 +91,7 @@ namespace ControlPad
 
         public static int GetFreeId<T>(this IEnumerable<T> items, Func<T, int> idSelector) // gets the lowest, not yet existing id
         {
-            var used = new HashSet<int>(items.Select(idSelector));
-            int candidate = 0;
-            while (used.Contains(candidate))
-                candidate++;
-            return candidate;
+            return IdAllocator.GetFreeId(items, idSelector);
         }
 
         public static void SetSliderTextBlocks()
