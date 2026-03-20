@@ -12,7 +12,8 @@
     <Border Padding="16">
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
-            <Grid>
+            <StackPanel>
+                <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -275,7 +276,8 @@
                     <ui:Button x:Name="Btn_Presets" Content="Presets" Click="Btn_Presets_Click" MinWidth="180" Grid.Column="1"/>
                 </Grid>
 
-            </Grid>
+                </Grid>
+            </StackPanel>
         </ScrollViewer>
     </Border>
 </UserControl>
