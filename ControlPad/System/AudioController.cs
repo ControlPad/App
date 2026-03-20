@@ -17,6 +17,7 @@ namespace ControlPad
         private readonly ConcurrentDictionary<string, (long Tick, int[] ProcessIds)> _processIdsCache = new();
         private readonly ConcurrentDictionary<string, (long Tick, string DeviceId)> _outputDeviceIdCache = new();
         private const int ProcessIdsCacheLifetimeMs = 500;
+        private const int ProcessIdsCacheTrimIntervalMs = 5000;
         private const int ProcessIdsCacheMaxEntries = 128;
         private const int OutputDeviceCacheLifetimeMs = 3000;
         private long _lastProcessCacheTrimTick = Environment.TickCount64;
@@ -198,27 +199,37 @@ namespace ControlPad
             _processIdsCache[processName] = (nowTick, processIds);
             long lastTrimTick = Interlocked.Read(ref _lastProcessCacheTrimTick);
             if (_processIdsCache.Count >= ProcessIdsCacheMaxEntries ||
-                (nowTick - lastTrimTick) > ProcessIdsCacheLifetimeMs)
+                (nowTick - lastTrimTick) > ProcessIdsCacheTrimIntervalMs)
             {
-                TrimProcessCache(nowTick);
-                Interlocked.Exchange(ref _lastProcessCacheTrimTick, nowTick);
+                if (Interlocked.CompareExchange(ref _lastProcessCacheTrimTick, nowTick, lastTrimTick) == lastTrimTick)
+                {
+                    TrimProcessCache(nowTick);
+                }
             }
             return processIds;
         }
 
         private void TrimProcessCache(long nowTick)
         {
-            var staleKeys = _processIdsCache
-                .Where(entry => (nowTick - entry.Value.Tick) > ProcessIdsCacheLifetimeMs)
-                .Select(entry => entry.Key)
-                .ToList();
+            var snapshot = _processIdsCache.ToArray();
+            var staleKeys = new List<string>();
+            foreach (var entry in snapshot)
+            {
+                if ((nowTick - entry.Value.Tick) > ProcessIdsCacheLifetimeMs)
+                    staleKeys.Add(entry.Key);
+            }
+
             foreach (var key in staleKeys)
                 _processIdsCache.TryRemove(key, out _);
 
             int overflow = _processIdsCache.Count - ProcessIdsCacheMaxEntries;
             if (overflow <= 0) return;
 
-            var oldestKeys = _processIdsCache
+            var staleKeySet = staleKeys.Count > 0 ? new HashSet<string>(staleKeys) : null;
+            var candidates = staleKeySet == null
+                ? snapshot.AsEnumerable()
+                : snapshot.Where(entry => !staleKeySet.Contains(entry.Key));
+            var oldestKeys = candidates
                 .OrderBy(entry => entry.Value.Tick)
                 .Take(overflow)
                 .Select(entry => entry.Key)
