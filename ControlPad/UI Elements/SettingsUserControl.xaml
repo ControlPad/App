@@ -130,7 +130,7 @@
                           Unchecked="cb_UnmuteOnSliderChange_Checked"/>
                     </Grid>
 
-                    <!-- Translation Exponent -->
+                    <!-- Translation Curve -->
                     <Grid Margin="0,8,0,0" Grid.Row="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -138,23 +138,66 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Margin="0,0,16,0">
-                            <Label Content="Translation _exponent"
-                            Padding="0"
-                            Target="{Binding ElementName=ThemeComboBox}"/>
-                            <Label Content="Exponent controlling the mapping curve from slider to&#x0a;sound bar."
+                            <Label Content="Translation _curve"
+                             Padding="0"
+                             Target="{Binding ElementName=TranslationCurvePresetComboBox}"/>
+                            <Label Content="Curve controlling mapping from slider to sound level."
                             Padding="0"
                             Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                         </StackPanel>
 
-                        <ui:NumberBox x:Name="nb_TranslationExponent"
-                        PlaceholderText="1.0" 
-                        Grid.ColumnSpan="2" 
-                        Margin="367,0,0,0" 
-                        Value="1.0"
-                        SmallChange="0.1"
-                        Minimum="0.1"
-                        ValidationMode="InvalidInputOverwritten" ValueChanged="nb_TranslationExponent_ValueChanged"
-                        />
+                        <StackPanel Grid.Column="1" Orientation="Vertical" MinWidth="180">
+                            <ComboBox x:Name="TranslationCurvePresetComboBox"
+                                      SelectedIndex="1"
+                                      VerticalAlignment="Center"
+                                      SelectionChanged="TranslationCurvePresetComboBox_SelectionChanged">
+                                <ComboBoxItem Content="ease"/>
+                                <ComboBoxItem Content="linear"/>
+                                <ComboBoxItem Content="ease-in"/>
+                                <ComboBoxItem Content="ease-out"/>
+                                <ComboBoxItem Content="ease-in-out"/>
+                                <ComboBoxItem Content="custom"/>
+                            </ComboBox>
+
+                            <UniformGrid x:Name="CustomCurveGrid" Columns="2" Rows="2" Margin="0,8,0,0">
+                                <ui:NumberBox x:Name="nb_CurveX1"
+                                              PlaceholderText="x1"
+                                              Value="0.0"
+                                              Minimum="0"
+                                              Maximum="1"
+                                              SmallChange="0.01"
+                                              Margin="0,0,6,6"
+                                              ValidationMode="InvalidInputOverwritten"
+                                              ValueChanged="nb_CustomCurve_ValueChanged"/>
+                                <ui:NumberBox x:Name="nb_CurveY1"
+                                              PlaceholderText="y1"
+                                              Value="0.0"
+                                              Minimum="0"
+                                              Maximum="1"
+                                              SmallChange="0.01"
+                                              Margin="6,0,0,6"
+                                              ValidationMode="InvalidInputOverwritten"
+                                              ValueChanged="nb_CustomCurve_ValueChanged"/>
+                                <ui:NumberBox x:Name="nb_CurveX2"
+                                              PlaceholderText="x2"
+                                              Value="1.0"
+                                              Minimum="0"
+                                              Maximum="1"
+                                              SmallChange="0.01"
+                                              Margin="0,0,6,0"
+                                              ValidationMode="InvalidInputOverwritten"
+                                              ValueChanged="nb_CustomCurve_ValueChanged"/>
+                                <ui:NumberBox x:Name="nb_CurveY2"
+                                              PlaceholderText="y2"
+                                              Value="1.0"
+                                              Minimum="0"
+                                              Maximum="1"
+                                              SmallChange="0.01"
+                                              Margin="6,0,0,0"
+                                              ValidationMode="InvalidInputOverwritten"
+                                              ValueChanged="nb_CustomCurve_ValueChanged"/>
+                            </UniformGrid>
+                        </StackPanel>
                     </Grid>
 
                     <!-- App Theme -->

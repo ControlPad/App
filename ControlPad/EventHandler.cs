@@ -183,7 +183,14 @@ namespace ControlPad
 
         private float SliderToFloat(int value, int mode = 0)
         {
-            return SliderValueConverter.SliderToFloat(value, Settings.TranslationExponent);
+            value -= 1;
+            float normalized = Math.Clamp((float)value / 1022.0f, 0f, 1f);
+
+            // Clamp to zero when slider is at or near the bottom to ensure complete silence
+            if (normalized < 0.005f)
+                return 0f;
+
+            return SliderTranslationCurve.Apply(normalized);
         }
     }
 }
