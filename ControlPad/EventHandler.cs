@@ -76,7 +76,7 @@ namespace ControlPad
                     else if (stream.MicName != null)
                         Task.Run(() => AudioController.SetMicVolume(stream.MicName, volume));
                     else if (stream.Process == null && stream.MicName == null)
-                        Task.Run(() => AudioController.SetSystemVolume(volume));
+                        Task.Run(() => AudioController.SetSystemVolume(volume, stream.DeviceName));
                 }                            
         }
 
