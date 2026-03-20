@@ -189,7 +189,7 @@ namespace ControlPad
             if (normalized < 0.005f)
                 return 0f;
 
-            return (float)Math.Pow(normalized, Settings.TranslationExponent);
+            return SliderTranslationCurve.Apply(normalized);
         }
     }
 }
