@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:ControlPad.Avalonia.Views"
         mc:Ignorable="d"
         d:DesignWidth="650"
         d:DesignHeight="600"
@@ -31,27 +32,19 @@
 
         <Border Grid.Row="2" Grid.Column="0" Background="#222222" Padding="10">
             <StackPanel Spacing="8">
-                <Button x:Name="HomeButton" Content="Home" />
-                <Button x:Name="SliderButton" Content="Slider" />
-                <Button x:Name="ButtonButton" Content="Button" />
+                <Button x:Name="HomeButton" Content="Home" Click="HomeButton_Click"/>
+                <Button x:Name="SliderButton" Content="Slider" Click="SliderButton_Click"/>
+                <Button x:Name="ButtonButton" Content="Button" Click="ButtonButton_Click"/>
                 <StackPanel Height="12" />
-                <Button x:Name="SettingsButton" Content="Settings" />
+                <Button x:Name="SettingsButton" Content="Settings" Click="SettingsButton_Click"/>
                 <Button x:Name="ExitButton" Content="Exit" Click="ExitButton_Click" />
             </StackPanel>
         </Border>
 
-        <Border Grid.Row="2"
-                Grid.Column="1"
-                Margin="10"
-                BorderBrush="#3C3C3C"
-                BorderThickness="1"
-                CornerRadius="6">
-            <Grid>
-                <TextBlock Text="Avalonia port bootstrap"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Opacity="0.8" />
-            </Grid>
+        <Border Grid.Row="2" Grid.Column="1" Margin="10" BorderBrush="#3C3C3C" BorderThickness="1" CornerRadius="6">
+            <ContentControl x:Name="MainContentHost">
+                <views:HomeView />
+            </ContentControl>
         </Border>
     </Grid>
 </Window>

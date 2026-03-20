@@ -68,6 +68,12 @@ dotnet run --project ControlPad.Avalonia/ControlPad.Avalonia.csproj
 
 The existing WPF app in `ControlPad/` remains the primary implementation.
 
+### Tests
+
+```bash
+dotnet test ControlPad.Tests/ControlPad.Tests.csproj
+```
+
 ### Publishing
 
 ```bash
