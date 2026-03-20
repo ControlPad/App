@@ -21,6 +21,7 @@ namespace ControlPad
         private readonly bool _isInitialized = false;
         private readonly MainWindow _mainWindow;
         private static readonly string[] TranslationCurvePresets = { "ease", "linear", "ease-in", "ease-out", "ease-in-out", "custom" };
+        private bool _suppressCustomCurveEvents = false;
 
         public SettingsUserControl(MainWindow mainWindow)
         {
@@ -112,7 +113,7 @@ namespace ControlPad
 
         private void nb_CustomCurve_ValueChanged(object sender, Wpf.Ui.Controls.NumberBoxValueChangedEventArgs e)
         {
-            if (!_isInitialized || Settings.TranslationCurvePreset != "custom")
+            if (!_isInitialized || _suppressCustomCurveEvents || Settings.TranslationCurvePreset != "custom")
                 return;
 
             Settings.TranslationCurveX1 = nb_CurveX1.Value ?? 0d;
@@ -176,10 +177,18 @@ namespace ControlPad
 
         private void SetCustomCurveControls(double x1, double y1, double x2, double y2)
         {
-            nb_CurveX1.Value = x1;
-            nb_CurveY1.Value = y1;
-            nb_CurveX2.Value = x2;
-            nb_CurveY2.Value = y2;
+            _suppressCustomCurveEvents = true;
+            try
+            {
+                nb_CurveX1.Value = x1;
+                nb_CurveY1.Value = y1;
+                nb_CurveX2.Value = x2;
+                nb_CurveY2.Value = y2;
+            }
+            finally
+            {
+                _suppressCustomCurveEvents = false;
+            }
         }
 
         private void Btn_Presets_Click(object sender, RoutedEventArgs e)
