@@ -171,6 +171,18 @@ namespace ControlPad
             return mics;
         }
 
+        public List<string> GetMicNames()
+        {
+            var names = new List<string>();
+            using var enumerator = new MMDeviceEnumerator();
+            foreach (var device in enumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
+            {
+                names.Add(device.DeviceFriendlyName);
+                device.Dispose();
+            }
+            return names;
+        }
+
         public SessionCollection GetAudioSessions()
         {
             using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
@@ -242,6 +254,17 @@ namespace ControlPad
         public List<MMDevice> GetOutputDevices()
         {
             return _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).ToList();
+        }
+
+        public List<string> GetOutputDeviceNames()
+        {
+            var names = new List<string>();
+            foreach (var device in _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
+            {
+                names.Add(device.DeviceFriendlyName);
+                device.Dispose();
+            }
+            return names;
         }
 
         private MMDevice? GetOutputDevice(string? outputDeviceName)
