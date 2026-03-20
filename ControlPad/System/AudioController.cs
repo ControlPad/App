@@ -41,10 +41,18 @@ namespace ControlPad
 
         public void SetSystemVolume(float volume)
         {
-            using var device = _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            using var device = GetOutputDevice(null);
             volume = Math.Clamp(volume, 0f, 1f);
 
             if(device != null) device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
+        }
+
+        public void SetSystemVolume(float volume, string? outputDeviceName)
+        {
+            using var device = GetOutputDevice(outputDeviceName);
+            volume = Math.Clamp(volume, 0f, 1f);
+
+            if (device != null) device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
         }
 
         public void SetMicVolume(string micName, float volume)
@@ -218,6 +226,19 @@ namespace ControlPad
                 return null;
             }
         }
+        
+        public List<MMDevice> GetOutputDevices()
+        {
+            return _enum.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).ToList();
+        }
 
+        private MMDevice? GetOutputDevice(string? outputDeviceName)
+        {
+            if (string.IsNullOrWhiteSpace(outputDeviceName))
+                return _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+
+            return GetOutputDevices().FirstOrDefault(d => d.DeviceFriendlyName == outputDeviceName)
+                   ?? _enum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+        }
     }
 }
