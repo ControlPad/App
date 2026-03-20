@@ -34,12 +34,13 @@
 
             <Button x:Name="btn_AddProcess" Content="Add Process" Margin="0,30,0,0" VerticalAlignment="Top" Height="33" Grid.Column="1" Click="btn_AddProcess_Click" Width="136" Grid.Row="1"/>
             <Button x:Name="btn_AddMic" Content="Add Microphone" Margin="0,68,0,0" VerticalAlignment="Top" Height="33" Grid.Column="1" Width="136" Grid.Row="1" Click="btn_AddMic_Click"/>
-            <Button x:Name="btn_Remove" Content="Remove" Margin="0,141,0,0" Grid.Column="1" Height="34" VerticalAlignment="Top" Click="btn_Remove_Click" Grid.Row="1" Width="136" />
+            <Button x:Name="btn_AddMain" Content="Add Main Audio" Margin="0,105,0,0" VerticalAlignment="Top" Height="32" Grid.Column="1" Width="136" Grid.Row="1" Click="btn_AddMain_Click"/>
+            <Button x:Name="btn_AddMainOutput" Content="Add Main Output" Margin="0,141,0,0" VerticalAlignment="Top" Height="33" Grid.Column="1" Width="136" Grid.Row="1" Click="btn_AddMainOutput_Click"/>
+            <Button x:Name="btn_Remove" Content="Remove" Margin="0,179,0,0" Grid.Column="1" Height="34" VerticalAlignment="Top" Click="btn_Remove_Click" Grid.Row="1" Width="136" />
 
             <Button x:Name="btn_Close" Content="Close" Margin="0,250,0,0" Grid.Column="1" Height="33" VerticalAlignment="Bottom" Click="btn_Close_Click" HorizontalAlignment="Center" Grid.Row="1"/>
             <Label Content="Processes:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="232" FontSize="14" Height="30" Grid.Row="1" Margin="20,0,0,0"/>
             <ui:TextBox x:Name="tb_CategoryName" HorizontalAlignment="Center" TextWrapping="Wrap" Text="CategoryName" VerticalAlignment="Top" Height="35" Grid.ColumnSpan="2" Margin="10" Width="428" PlaceholderText="Category Name"/>
-            <Button x:Name="btn_AddMain" Content="Add Main Audio" Margin="0,105,0,0" VerticalAlignment="Top" Height="32" Grid.Column="1" Width="136" Grid.Row="1" Click="btn_AddMain_Click"/>
         </Grid>
     </DockPanel>
 </ui:FluentWindow>

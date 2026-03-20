@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -168,11 +169,14 @@ namespace ControlPad
             cb_UnmuteOnSliderChange.IsChecked = Settings.UnmuteOnSliderChange;
             ThemeComboBox.SelectedIndex = Settings.SelectedThemeIndex;
             BackgroundComboBox.SelectedIndex = Settings.SelectedBackgroundIndex;
-
             int presetIndex = Array.IndexOf(TranslationCurvePresets, Settings.TranslationCurvePreset);
             TranslationCurvePresetComboBox.SelectedIndex = presetIndex >= 0 ? presetIndex : 1;
             SetCustomCurveControls(Settings.TranslationCurveX1, Settings.TranslationCurveY1, Settings.TranslationCurveX2, Settings.TranslationCurveY2);
             CustomCurveGrid.IsEnabled = Settings.TranslationCurvePreset == "custom";
+
+            var infoVersion = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            lbl_AppVersion.Content = !string.IsNullOrEmpty(infoVersion) ? infoVersion : "Unknown";
         }
 
         private void SetCustomCurveControls(double x1, double y1, double x2, double y2)
