@@ -10,7 +10,8 @@
              >
 
     <Border Padding="16">
-        <StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -275,6 +276,6 @@
                 </Grid>
 
             </Grid>
-        </StackPanel>
+        </ScrollViewer>
     </Border>
 </UserControl>
