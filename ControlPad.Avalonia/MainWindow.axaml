@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:ControlPad.Avalonia.Views"
+        mc:Ignorable="d"
+        d:DesignWidth="650"
+        d:DesignHeight="600"
+        x:Class="ControlPad.Avalonia.MainWindow"
+        Title="Slidr"
+        Width="650"
+        Height="600"
+        CanResize="False">
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="170,*">
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#2B2B2B" Padding="12,8">
+            <TextBlock Text="Slidr"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center" />
+        </Border>
+
+        <Border x:Name="BoardDisconnectedBar"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Background="#4A2F2F"
+                BorderBrush="#7A3F3F"
+                BorderThickness="1"
+                Padding="10,8"
+                IsVisible="False">
+            <TextBlock Text="Board not connected. Please connect your board to use this app." />
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" Background="#222222" Padding="10">
+            <StackPanel Spacing="8">
+                <Button x:Name="HomeButton" Content="Home" Click="HomeButton_Click"/>
+                <Button x:Name="SliderButton" Content="Slider" Click="SliderButton_Click"/>
+                <Button x:Name="ButtonButton" Content="Button" Click="ButtonButton_Click"/>
+                <StackPanel Height="12" />
+                <Button x:Name="SettingsButton" Content="Settings" Click="SettingsButton_Click"/>
+                <Button x:Name="ExitButton" Content="Exit" Click="ExitButton_Click" />
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="1" Margin="10" BorderBrush="#3C3C3C" BorderThickness="1" CornerRadius="6">
+            <ContentControl x:Name="MainContentHost">
+                <views:HomeView />
+            </ContentControl>
+        </Border>
+    </Grid>
+</Window>

@@ -48,6 +48,31 @@ dotnet build ControlPad/ControlPad.csproj -c Release
 dotnet run --project ControlPad/ControlPad.csproj
 ```
 
+### Avalonia Port (In Progress)
+
+A parallel Avalonia port scaffold now exists at:
+
+`ControlPad.Avalonia/ControlPad.Avalonia.csproj`
+
+Build:
+
+```bash
+dotnet build ControlPad.Avalonia/ControlPad.Avalonia.csproj
+```
+
+Run:
+
+```bash
+dotnet run --project ControlPad.Avalonia/ControlPad.Avalonia.csproj
+```
+
+The existing WPF app in `ControlPad/` remains the primary implementation.
+
+### Tests
+
+```bash
+dotnet test ControlPad.Tests/ControlPad.Tests.csproj
+```
 ### Publishing
 
 ```bash
