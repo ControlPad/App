@@ -28,6 +28,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ControlPad/ControlPad.csproj
 
+      - name: Run unit tests
+        run: dotnet test ControlPad.Tests/ControlPad.Tests.csproj -c Release
+
       - name: Publish (framework-dependent)
         run: dotnet publish ControlPad/ControlPad.csproj -c Release -r win-x64 --no-self-contained -o publish
 
