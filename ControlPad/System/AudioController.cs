@@ -17,10 +17,12 @@ namespace ControlPad
         private MMDeviceEnumerator _enum;
         private readonly ConcurrentDictionary<string, (long Tick, int[] ProcessIds)> _processIdsCache = new();
         private readonly ConcurrentDictionary<string, (long Tick, string DeviceId)> _outputDeviceIdCache = new();
+        private readonly ConcurrentDictionary<string, (long Tick, string DeviceId)> _micDeviceIdCache = new();
         private const int ProcessIdsCacheLifetimeMs = 500;
         private const int ProcessIdsCacheTrimIntervalMs = 5000;
         private const int ProcessIdsCacheMaxEntries = 128;
         private const int OutputDeviceCacheLifetimeMs = 3000;
+        private const int MicDeviceCacheLifetimeMs = 3000;
         private long _lastProcessCacheTrimTick = Environment.TickCount64;
 
         public AudioController()
@@ -66,12 +68,9 @@ namespace ControlPad
 
         public void SetMicVolume(string micName, float volume)
         {
-            List<MMDevice> mics = GetMics();
-            foreach (MMDevice mic in mics)
-            {
-                if (mic.DeviceFriendlyName == micName)
-                    mic.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
-            }
+            using var mic = GetMic(micName);
+            volume = Math.Clamp(volume, 0f, 1f);
+            if (mic != null) mic.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
         }
 
         public void MuteProcess(string processName, bool mute)
@@ -105,12 +104,8 @@ namespace ControlPad
 
         public void MuteMic(string micName, bool mute)
         {
-            List<MMDevice> mics = GetMics();
-            foreach (MMDevice mic in mics)
-            {
-                if (mic.DeviceFriendlyName == micName)
-                    mic.AudioEndpointVolume.Mute = mute;
-            }
+            using var mic = GetMic(micName);
+            if (mic != null) mic.AudioEndpointVolume.Mute = mute;
         }
 
         public bool IsProcessMute(string processName)
@@ -147,12 +142,8 @@ namespace ControlPad
 
         public bool IsMicMute(string micName)
         {
-            List<MMDevice> mics = GetMics();
-            foreach (MMDevice mic in mics)
-            {
-                if (mic.DeviceFriendlyName == micName)
-                    return mic.AudioEndpointVolume.Mute;
-            }
+            using var mic = GetMic(micName);
+            if (mic != null) return mic.AudioEndpointVolume.Mute;
             return false;
         }
 
@@ -182,6 +173,46 @@ namespace ControlPad
                 device.Dispose();
             }
             return names;
+        }
+
+        private MMDevice? GetMic(string micName)
+        {
+            if (string.IsNullOrWhiteSpace(micName))
+                return null;
+
+            long nowTick = Environment.TickCount64;
+            if (_micDeviceIdCache.TryGetValue(micName, out var cacheEntry) &&
+                (nowTick - cacheEntry.Tick) <= MicDeviceCacheLifetimeMs)
+            {
+                try
+                {
+                    return _enum.GetDevice(cacheEntry.DeviceId);
+                }
+                catch
+                {
+                    _micDeviceIdCache.TryRemove(micName, out _);
+                }
+            }
+
+            MMDevice? matchedDevice = null;
+            foreach (var device in _enum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
+            {
+                if (matchedDevice == null && device.DeviceFriendlyName == micName)
+                {
+                    matchedDevice = device;
+                }
+                else
+                {
+                    device.Dispose();
+                }
+            }
+
+            if (matchedDevice != null)
+            {
+                _micDeviceIdCache[micName] = (nowTick, matchedDevice.ID);
+            }
+
+            return matchedDevice;
         }
 
         public SessionCollection GetAudioSessions()

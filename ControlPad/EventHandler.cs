@@ -61,22 +61,27 @@ namespace ControlPad
                 {
                     float volume = SliderToFloat(value);
 
-                    if (Settings.UnmuteOnSliderChange)
+                    Task.Run(() =>
                     {
                         if (stream.Process != null)
-                            Task.Run(() => AudioController.MuteProcess(stream.Process, false));
+                        {
+                            if (Settings.UnmuteOnSliderChange)
+                                AudioController.MuteProcess(stream.Process, false);
+                            AudioController.SetProcessVolume(stream.Process, volume);
+                        }
                         else if (stream.MicName != null)
-                            Task.Run(() => AudioController.MuteMic(stream.MicName, false));
+                        {
+                            if (Settings.UnmuteOnSliderChange)
+                                AudioController.MuteMic(stream.MicName, false);
+                            AudioController.SetMicVolume(stream.MicName, volume);
+                        }
                         else if (stream.Process == null && stream.MicName == null)
-                            Task.Run(() => AudioController.MuteSystem(false, stream.DeviceName));
-                    }
-
-                    if (stream.Process != null)
-                        Task.Run(() => AudioController.SetProcessVolume(stream.Process, volume));
-                    else if (stream.MicName != null)
-                        Task.Run(() => AudioController.SetMicVolume(stream.MicName, volume));
-                    else if (stream.Process == null && stream.MicName == null)
-                        Task.Run(() => AudioController.SetSystemVolume(volume, stream.DeviceName));
+                        {
+                            if (Settings.UnmuteOnSliderChange)
+                                AudioController.MuteSystem(false, stream.DeviceName);
+                            AudioController.SetSystemVolume(volume, stream.DeviceName);
+                        }
+                    });
                 }                            
         }
 
