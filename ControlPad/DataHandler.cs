@@ -70,20 +70,30 @@ namespace ControlPad
             {
                 string[] lines = File.ReadAllLines(path);
 
-                for (int i = 0; i < SliderValues.Count; i++)
+                for (int i = 0; i < SliderValues.Count && i < lines.Length; i++)
                 {
-                    if (int.TryParse(lines[i].Split(':')[1].Trim(), out int sliderCategoryId))
+                    var parts = lines[i].Split(':');
+                    if (parts.Length >= 2 && int.TryParse(parts[1].Trim(), out int sliderCategoryId))
                     {
                         var category = SliderCategories.FirstOrDefault(c => c.Id == sliderCategoryId);
                         SliderValues[i].slider.Category = category;
                     }
-                }
-                for (int i = 0; i < ButtonValues.Count; i++)
-                {
-                    if (int.TryParse(lines[i + SliderValues.Count].Split(':')[1].Trim(), out int buttonCategoryId))
+                    else
                     {
-                        var category = ButtonValues[i].button.Category = ButtonCategories.FirstOrDefault(c => c.Id == buttonCategoryId);
+                        SliderValues[i].slider.Category = null;
+                    }
+                }
+                for (int i = 0; i < ButtonValues.Count && (i + SliderValues.Count) < lines.Length; i++)
+                {
+                    var parts = lines[i + SliderValues.Count].Split(':');
+                    if (parts.Length >= 2 && int.TryParse(parts[1].Trim(), out int buttonCategoryId))
+                    {
+                        var category = ButtonCategories.FirstOrDefault(c => c.Id == buttonCategoryId);
                         ButtonValues[i].button.Category = category;
+                    }
+                    else
+                    {
+                        ButtonValues[i].button.Category = null;
                     }
                 }
             }
